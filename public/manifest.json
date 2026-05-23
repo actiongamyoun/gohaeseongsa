@@ -1,0 +1,17 @@
+{
+  "name": "고해성사",
+  "short_name": "고해성사",
+  "description": "조용히 적어두는 익명 고백 공간",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf3e7",
+  "theme_color": "#d4847a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
