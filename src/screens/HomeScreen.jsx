@@ -3,7 +3,6 @@ import Header from '../components/Header.jsx';
 import ConfessionCard from '../components/ConfessionCard.jsx';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 
-// 환경변수 없을 때 보여줄 더미 데이터 (미리보기용)
 const DUMMY_CONFESSIONS = [
   {
     id: 'demo-1',
@@ -11,10 +10,7 @@ const DUMMY_CONFESSIONS = [
     category: 'work',
     ai_response: '오늘 밤은 푹 자요. 내일은 내일의 태양이 뜨니까 ☀️',
     created_at: new Date(Date.now() - 60000).toISOString(),
-    hug_count: 234,
-    laugh_count: 89,
-    me_too_count: 12,
-    bless_count: 45,
+    hug_count: 234, laugh_count: 89, me_too_count: 12, bless_count: 45,
   },
   {
     id: 'demo-2',
@@ -22,10 +18,7 @@ const DUMMY_CONFESSIONS = [
     category: 'love',
     ai_response: '그 죄책감이 답을 알고 있어요.',
     created_at: new Date(Date.now() - 720000).toISOString(),
-    hug_count: 56,
-    laugh_count: 23,
-    me_too_count: 178,
-    bless_count: 344,
+    hug_count: 56, laugh_count: 23, me_too_count: 178, bless_count: 344,
   },
   {
     id: 'demo-3',
@@ -33,14 +26,17 @@ const DUMMY_CONFESSIONS = [
     category: 'family',
     ai_response: '지금이라도 전화해요. 늦은 효도는 있어도 안 한 효도는 없잖아요 🌷',
     created_at: new Date(Date.now() - 3600000).toISOString(),
-    hug_count: 89,
-    laugh_count: 67,
-    me_too_count: 234,
-    bless_count: 567,
+    hug_count: 89, laugh_count: 67, me_too_count: 234, bless_count: 567,
   },
 ];
 
-export default function HomeScreen({ selectedCategory, onCategoryChange, onBack }) {
+export default function HomeScreen({
+  selectedCategory,
+  onCategoryChange,
+  onBack,
+  onWrite,
+  onOpenDetail,
+}) {
   const [confessions, setConfessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -53,7 +49,6 @@ export default function HomeScreen({ selectedCategory, onCategoryChange, onBack 
     setLoading(true);
     setError(null);
 
-    // Supabase 미설정 시 더미 데이터
     if (!isSupabaseConfigured) {
       const filtered = selectedCategory === 'all'
         ? DUMMY_CONFESSIONS
@@ -129,13 +124,17 @@ export default function HomeScreen({ selectedCategory, onCategoryChange, onBack 
             </div>
           </div>
         ) : (
-          confessions.map((c) => <ConfessionCard key={c.id} confession={c} />)
+          confessions.map((c) => (
+            <div key={c.id} onClick={() => onOpenDetail?.(c)} style={{ cursor: 'pointer' }}>
+              <ConfessionCard confession={c} />
+            </div>
+          ))
         )}
       </div>
 
       <button
         className="fab"
-        onClick={() => alert('작성 화면은 다음 단계에서 만들어집니다 ✍️')}
+        onClick={onWrite}
         aria-label="새 고백 작성"
       >
         ✒️

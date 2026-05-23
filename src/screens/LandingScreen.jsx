@@ -19,7 +19,7 @@ const SAMPLE_CONFESSIONS = [
   },
 ];
 
-export default function LandingScreen({ onEnter }) {
+export default function LandingScreen({ onEnter, onAdmin }) {
   return (
     <div className="landing-scroll">
 
@@ -180,6 +180,7 @@ export default function LandingScreen({ onEnter }) {
         </div>
         <div className="footer-copy">
           © 2026 비밀고백 · Secret Confession
+          {onAdmin && <span className="admin-dot" onClick={onAdmin}>·</span>}
         </div>
       </footer>
 
