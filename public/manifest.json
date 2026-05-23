@@ -1,7 +1,7 @@
 {
-  "name": "고해성사",
-  "short_name": "고해성사",
-  "description": "조용히 적어두는 익명 고백 공간",
+  "name": "비밀고백",
+  "short_name": "비밀고백",
+  "description": "익명의 당신, 익명의 위로",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#faf3e7",

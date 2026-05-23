@@ -17,7 +17,7 @@ export default function ConfessionCard({ confession }) {
 
       {confession.ai_response && (
         <div className="ai-response">
-          <span className="ai-label">from Claude</span>
+          <span className="ai-label">from Claude <span className="ai-disclaimer">· 참고용 자동 응답</span></span>
           {confession.ai_response}
         </div>
       )}

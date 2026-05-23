@@ -12,12 +12,17 @@ function todayLabel() {
   return `${months[d.getMonth()]} ${d.getDate()}${suffix(d.getDate())}`;
 }
 
-export default function Header({ selectedCategory, onCategoryChange }) {
+export default function Header({ selectedCategory, onCategoryChange, onBack }) {
   return (
     <div className="app-header">
       <div className="brand-row">
+        {onBack && (
+          <button className="header-back-btn" onClick={onBack} aria-label="뒤로">
+            ←
+          </button>
+        )}
         <span className="brand-script">my</span>
-        <span className="brand-name">고해성사</span>
+        <span className="brand-name">비밀고백</span>
         <span className="brand-date">{todayLabel()}</span>
       </div>
       <CategoryTabs

@@ -533,3 +533,37 @@ input, textarea, select {
   /* 일기장 특성상 다크모드도 따뜻한 톤 유지
      완전 어두운 다크모드는 추후 옵션으로 */
 }
+
+/* ===== Header 뒤로가기 버튼 ===== */
+.header-back-btn {
+  font-size: 20px;
+  color: var(--ink-light);
+  padding: 4px 8px;
+  margin-right: 4px;
+  margin-left: -4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  min-width: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.header-back-btn:active {
+  background: var(--cream);
+}
+
+/* ===== AI 응답 면책조항 ===== */
+.ai-disclaimer {
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-size: 9px;
+  color: var(--ink-faded);
+  font-weight: normal;
+  margin-left: 4px;
+  letter-spacing: 0;
+}

@@ -40,7 +40,7 @@ const DUMMY_CONFESSIONS = [
   },
 ];
 
-export default function HomeScreen({ selectedCategory, onCategoryChange }) {
+export default function HomeScreen({ selectedCategory, onCategoryChange, onBack }) {
   const [confessions, setConfessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -94,6 +94,7 @@ export default function HomeScreen({ selectedCategory, onCategoryChange }) {
       <Header
         selectedCategory={selectedCategory}
         onCategoryChange={onCategoryChange}
+        onBack={onBack}
       />
 
       <div className="scroll-area">
@@ -124,7 +125,7 @@ export default function HomeScreen({ selectedCategory, onCategoryChange }) {
             <div className="empty-state-emoji">📭</div>
             <div className="empty-state-title">아직 고백이 없어요</div>
             <div className="empty-state-text">
-              첫 번째 고백을 적어보세요
+              첫 번째 비밀고백을 적어보세요
             </div>
           </div>
         ) : (
