@@ -1,6 +1,6 @@
 import { CATEGORY_MAP, REACTIONS } from '../lib/constants.js';
 import { timeAgo } from '../lib/time.js';
-import { CATEGORY_ICONS, REACTION_ICONS, IconHeart } from './icons.jsx';
+import { CATEGORY_ICONS, REACTION_ICONS } from './icons.jsx';
 
 export default function ConfessionCard({ confession }) {
   const cat = CATEGORY_MAP[confession.category] || { label: '기타' };
@@ -17,16 +17,6 @@ export default function ConfessionCard({ confession }) {
       </div>
 
       <div className="card-content">{confession.content}</div>
-
-      {confession.ai_response && (
-        <div className="ai-response">
-          <div className="ai-label">
-            <IconHeart />
-            from Claude
-          </div>
-          <div className="ai-response-text">{confession.ai_response}</div>
-        </div>
-      )}
 
       <div className="card-reactions">
         {REACTIONS.map((r) => {
