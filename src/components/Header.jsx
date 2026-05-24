@@ -11,7 +11,6 @@ export default function Header({ selectedCategory, onCategoryChange, onBack, onM
           </button>
         )}
         <span className="brand-name">Secret Diary</span>
-        <span className="brand-name-ko">· 비밀고백</span>
 
         {onMyPage && (
           <button className="header-right-btn" onClick={onMyPage} aria-label="내 이야기">
