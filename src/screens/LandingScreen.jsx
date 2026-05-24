@@ -1,10 +1,17 @@
+import { useEffect, useState } from 'react';
 import { CATEGORIES } from '../lib/constants.js';
 import { CATEGORY_ICONS, IconLock, IconHeart, IconCandle, IconCheer } from '../components/icons.jsx';
 import LanguageToggle from '../components/LanguageToggle.jsx';
 import { useTranslation } from '../i18n/index.jsx';
+import { getLandingStats, formatStatNumber } from '../lib/stats.js';
 
 export default function LandingScreen({ onEnter, onAdmin }) {
   const { t, lang } = useTranslation();
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    getLandingStats().then(setStats).catch(() => {});
+  }, []);
 
   return (
     <div className="landing-scroll">
@@ -27,6 +34,25 @@ export default function LandingScreen({ onEnter, onAdmin }) {
           {t('landing.hero_sub_1')}<br />
           {t('landing.hero_sub_2')}
         </p>
+
+        {/* 통계 카드 - 오늘 + 누적 */}
+        {stats && (
+          <div className="hero-stats">
+            <div className="hero-stat-today">
+              <span className="hero-stat-icon">✨</span>
+              <span className="hero-stat-text">
+                {stats.todayCount > 0
+                  ? t('landing.stats_today', { count: formatStatNumber(stats.todayCount, lang) })
+                  : t('landing.stats_today_zero')}
+              </span>
+            </div>
+            {stats.totalCount > 0 && (
+              <div className="hero-stat-total">
+                {t('landing.stats_total', { count: formatStatNumber(stats.totalCount, lang) })}
+              </div>
+            )}
+          </div>
+        )}
 
         <button className="hero-cta" onClick={onEnter}>
           {t('landing.cta_primary')}

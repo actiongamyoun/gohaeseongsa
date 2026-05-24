@@ -37,7 +37,10 @@
     "footer_disclaimer_3": "Please reach out below if you need real help.",
     "helpline_1": "Suicide Prevention 1393 (KR)",
     "helpline_2": "Youth Counseling 1388 (KR)",
-    "helpline_3": "Mental Health Crisis 1577-0199 (KR)"
+    "helpline_3": "Mental Health Crisis 1577-0199 (KR)",
+    "stats_today": "{{count}} hearts shared today",
+    "stats_today_zero": "Be the first heart to share today",
+    "stats_total": "{{count}} stories in total"
   },
   "categories": {
     "work": "Work",

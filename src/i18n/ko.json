@@ -37,7 +37,10 @@
     "footer_disclaimer_3": "전문가의 도움이 필요하시면 아래로 연락해주세요.",
     "helpline_1": "자살예방상담 1393",
     "helpline_2": "청소년상담 1388",
-    "helpline_3": "정신건강위기상담 1577-0199"
+    "helpline_3": "정신건강위기상담 1577-0199",
+    "stats_today": "오늘 {{count}}명이 마음을 나눴어요",
+    "stats_today_zero": "오늘 첫 마음의 주인이 되어주세요",
+    "stats_total": "누적 {{count}}개의 이야기"
   },
   "categories": {
     "work": "직장",
