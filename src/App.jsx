@@ -14,7 +14,23 @@ export default function App() {
   const [detailData, setDetailData] = useState(null);
   const [confessionDraft, setConfessionDraft] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [bgImage] = useState(getRandomBackground); // 세션 내내 같은 배경
+  const [bgImage, setBgImage] = useState(getRandomBackground);
+  const [bgLoaded, setBgLoaded] = useState(false);
+
+  // 배경 이미지 로드 확인
+  useEffect(() => {
+    if (!bgImage) return;
+    const img = new Image();
+    img.onload = () => {
+      setBgLoaded(true);
+      console.log('[bg] 배경 로드 성공:', bgImage);
+    };
+    img.onerror = () => {
+      console.warn('[bg] 배경 로드 실패:', bgImage, '— public/backgrounds/ 폴더에 이미지가 있는지 확인하세요');
+      setBgLoaded(false);
+    };
+    img.src = bgImage;
+  }, [bgImage]);
 
   useEffect(() => {
     const path = window.location.pathname;
@@ -49,8 +65,8 @@ export default function App() {
 
   return (
     <div
-      className="app-frame has-bg-image"
-      style={{ backgroundImage: `url(${bgImage})` }}
+      className={`app-frame ${bgLoaded ? 'has-bg-image' : 'has-bg-fallback'}`}
+      style={bgLoaded ? { backgroundImage: `url(${bgImage})` } : undefined}
     >
       <div className="app-bg-overlay" />
       <AmbientParticles />

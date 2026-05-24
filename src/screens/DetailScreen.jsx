@@ -279,7 +279,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
             <div className="detail-ai-label">
               <IconHeart />
               from Claude
-              <span className="ai-disclaimer">· 참고용 자동 응답</span>
             </div>
             <div className="detail-ai-text">{confession.ai_response}</div>
           </div>

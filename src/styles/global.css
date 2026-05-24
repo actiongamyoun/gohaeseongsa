@@ -2484,3 +2484,98 @@ input, textarea, select { font-size: 16px; }
     background-attachment: scroll;
   }
 }
+
+/* ============================================
+   🔧 v4.1 - FAB 위치 고정 강화
+   ============================================ */
+
+/* FAB 우측 하단 강제 고정 */
+.app-frame .fab {
+  position: absolute !important;
+  bottom: calc(24px + var(--safe-area-bottom)) !important;
+  right: 24px !important;
+  left: auto !important;
+  top: auto !important;
+  width: 60px !important;
+  height: 60px !important;
+  z-index: 30 !important;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%) !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  box-shadow:
+    0 4px 16px rgba(90, 78, 140, 0.4),
+    0 8px 32px rgba(90, 78, 140, 0.25) !important;
+}
+
+.app-frame .fab svg {
+  width: 24px !important;
+  height: 24px !important;
+  color: #fff !important;
+  stroke: #fff !important;
+}
+
+/* fabAppear 애니메이션이 위치를 바꾸지 않도록 */
+.fab {
+  animation: none;
+}
+
+.fab:active {
+  transform: scale(0.92);
+}
+
+/* ============================================
+   🔧 v4.1 - 배경 이미지 디버그 + 강화
+   ============================================ */
+
+/* 배경이 보이는지 시각적으로 확인 가능하게 (디버그) */
+/* 카드 반투명도 살짝 줄여서 배경 더 잘 보이게 */
+.app-frame.has-bg-image .diary-card {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.app-frame.has-bg-image .scroll-area {
+  background: transparent;
+}
+
+.app-frame.has-bg-image .app-header {
+  background: rgba(255, 255, 255, 0.78) !important;
+}
+
+/* 배경 오버레이 살짝 더 투명하게 (배경 더 잘 보이게) */
+.app-bg-overlay {
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(247, 244, 238, 0.65) 30%,
+    rgba(237, 232, 245, 0.72) 70%,
+    rgba(221, 212, 237, 0.78) 100%
+  ) !important;
+}
+
+/* ============================================
+   🔧 v4.1 - 배경 이미지 없을 때 fallback
+   ============================================ */
+.app-frame.has-bg-fallback {
+  background: linear-gradient(135deg,
+    #faf6ed 0%,
+    #f3ebf8 25%,
+    #e8dff0 50%,
+    #f3ebf8 75%,
+    #faf6ed 100%
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 20s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.has-bg-fallback .app-bg-overlay {
+  background: transparent !important;
+}

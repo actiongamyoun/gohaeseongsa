@@ -23,7 +23,6 @@ export default function ConfessionCard({ confession }) {
           <div className="ai-label">
             <IconHeart />
             from Claude
-            <span className="ai-disclaimer">· 참고용 자동 응답</span>
           </div>
           <div className="ai-response-text">{confession.ai_response}</div>
         </div>

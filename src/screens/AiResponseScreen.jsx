@@ -278,7 +278,7 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
               </div>
               <div className="chat-name">
                 <strong>Claude</strong>
-                <span>참고용 답변</span>
+                <span>당신께 보내는 답장</span>
               </div>
             </div>
 
