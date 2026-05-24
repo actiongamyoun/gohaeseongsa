@@ -47,6 +47,8 @@ export default function App() {
 
   return (
     <div className="app-frame">
+      <AmbientParticles />
+
       {screen === 'landing' && (
         <LandingScreen
           onEnter={() => navigate('home')}
@@ -114,6 +116,37 @@ export default function App() {
       {screen === 'admin' && (
         <AdminScreen onClose={() => navigate('landing')} />
       )}
+    </div>
+  );
+}
+
+// 떠다니는 작은 점들 (배경 효과)
+function AmbientParticles() {
+  const particles = [
+    { x: 10, y: 15, dur: 6, delay: 0 },
+    { x: 80, y: 25, dur: 8, delay: 1.5 },
+    { x: 30, y: 50, dur: 7, delay: 3 },
+    { x: 65, y: 60, dur: 9, delay: 0.5 },
+    { x: 20, y: 80, dur: 6.5, delay: 2 },
+    { x: 90, y: 75, dur: 7.5, delay: 4 },
+    { x: 50, y: 30, dur: 8.5, delay: 2.5 },
+    { x: 75, y: 90, dur: 6, delay: 5 },
+  ];
+
+  return (
+    <div className="ambient-particles" aria-hidden="true">
+      {particles.map((p, i) => (
+        <div
+          key={i}
+          className="ambient-dot"
+          style={{
+            '--x': `${p.x}%`,
+            '--y': `${p.y}%`,
+            '--dur': `${p.dur}s`,
+            '--delay': `${p.delay}s`,
+          }}
+        />
+      ))}
     </div>
   );
 }

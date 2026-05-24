@@ -1862,3 +1862,513 @@ input, textarea, select { font-size: 16px; }
   align-items: center;
   padding: 30px 20px;
 }
+
+/* ============================================
+   🎨 v3 - 배경 이미지 시스템
+   ============================================ */
+.has-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.ai-screen-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(237, 232, 245, 0.88) 50%,
+      rgba(221, 212, 237, 0.94) 100%
+    );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* 앱 전체 배경 (랜딩, 홈에도 사용 가능) */
+.app-frame.has-bg {
+  position: relative;
+}
+
+.app-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(237,232,245,0.9));
+  z-index: 0;
+  pointer-events: none;
+}
+
+.app-frame.has-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   🎬 v3 - 듣는 중 (Listening Orb)
+   ============================================ */
+.ai-listening {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  gap: 18px;
+  text-align: center;
+  min-height: 280px;
+}
+
+.listening-orb {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orb-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-pale) 0%, transparent 70%);
+  animation: orbPulse 2.5s ease-in-out infinite;
+}
+
+.orb-inner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-soft) 0%, var(--accent) 100%);
+  box-shadow:
+    0 0 24px var(--accent-pale),
+    0 0 60px rgba(122, 111, 176, 0.5);
+  animation: orbBreath 2.5s ease-in-out infinite;
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(0.9); opacity: 0.4; }
+  50% { transform: scale(1.4); opacity: 0.1; }
+}
+
+@keyframes orbBreath {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.listening-text {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.listening-dots {
+  display: flex;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: 28px;
+  color: var(--accent-soft);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ============================================
+   📮 v3 - 봉투 떨어짐 연출
+   ============================================ */
+.envelope-falling-stage {
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.envelope-falling {
+  position: absolute;
+  top: -80px;
+  animation: envelopeFalls 2s ease-in forwards;
+}
+
+.envelope-body {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--paper) 0%, var(--accent-bg) 100%);
+  border: 2px solid var(--accent-pale);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  box-shadow:
+    0 8px 32px rgba(90, 78, 140, 0.25),
+    0 4px 12px rgba(90, 78, 140, 0.15);
+}
+
+@keyframes envelopeFalls {
+  0% {
+    top: -120px;
+    transform: rotate(-15deg) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  40% {
+    transform: rotate(8deg) scale(0.9);
+  }
+  60% {
+    transform: rotate(-5deg) scale(1);
+  }
+  80% {
+    transform: rotate(3deg) scale(1.05);
+  }
+  100% {
+    top: calc(50% - 50px);
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   ✨ v3 - 봉투 도착 + 봉인 풀림
+   ============================================ */
+.envelope-arrived-stage {
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.envelope-arrived {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: arrivedShake 0.5s ease-out;
+}
+
+@keyframes arrivedShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.envelope-sparkle {
+  position: absolute;
+  top: 10px;
+  right: calc(50% - 60px);
+  font-size: 24px;
+  animation: sparkle 1.5s ease-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+}
+
+.envelope-body.opening {
+  position: relative;
+  overflow: visible;
+  animation: envelopeOpening 1.5s ease-out forwards;
+}
+
+.envelope-body.opening::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 50%;
+  background: linear-gradient(180deg, var(--accent-pale) 0%, var(--accent-bg) 100%);
+  border: 2px solid var(--accent);
+  border-radius: 12px 12px 0 0;
+  transform-origin: top;
+  animation: flapOpens 1.5s ease-out forwards;
+}
+
+@keyframes envelopeOpening {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes flapOpens {
+  0% { transform: rotateX(0deg); opacity: 1; }
+  60% { transform: rotateX(-160deg); opacity: 1; }
+  100% { transform: rotateX(-180deg); opacity: 0; }
+}
+
+.arrived-label {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--accent-deep);
+  animation: labelFadeIn 0.8s ease-out 0.3s both;
+}
+
+@keyframes labelFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   💬 v3 - 채팅형 답변
+   ============================================ */
+.chat-thread {
+  background: var(--paper);
+  border-radius: 18px;
+  padding: 18px 16px 22px;
+  border: 1px solid var(--line);
+  box-shadow:
+    0 4px 24px rgba(90, 78, 140, 0.1),
+    0 2px 8px rgba(90, 78, 140, 0.05);
+  animation: threadAppear 0.6s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@keyframes threadAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.chat-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.chat-name {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.3;
+}
+
+.chat-name strong {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.chat-name span {
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+}
+
+.chat-bubble {
+  background: var(--accent-bg);
+  border-radius: 18px 18px 18px 6px;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 92%;
+  word-break: keep-all;
+  font-weight: 500;
+  animation: bubbleAppear 0.4s ease-out;
+  align-self: flex-start;
+}
+
+@keyframes bubbleAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 타이핑 인디케이터 */
+.chat-bubble-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 18px;
+  background: var(--accent-bg);
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   🌸 v3 - 카드 부드러운 등장 (홈/내이야기)
+   ============================================ */
+.diary-card {
+  animation: cardFloat 0.5s ease-out both;
+}
+
+@keyframes cardFloat {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.diary-card:nth-child(1) { animation-delay: 0.05s; }
+.diary-card:nth-child(2) { animation-delay: 0.1s; }
+.diary-card:nth-child(3) { animation-delay: 0.15s; }
+.diary-card:nth-child(4) { animation-delay: 0.2s; }
+.diary-card:nth-child(5) { animation-delay: 0.25s; }
+
+.diary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* FAB hover 효과 */
+.fab {
+  animation: fabAppear 0.6s ease-out 0.3s both;
+}
+
+.fab:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 6px 20px rgba(90, 78, 140, 0.4),
+    0 10px 30px rgba(90, 78, 140, 0.2);
+}
+
+@keyframes fabAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-45deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+/* ============================================
+   🌅 v3 - 랜딩 hero 배경 강화
+   ============================================ */
+.landing-hero.has-bg {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.landing-hero.has-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(237, 232, 245, 0.85) 50%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
+  z-index: 1;
+}
+
+.landing-hero.has-bg > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* 떠다니는 파티클 - 잎/별 (글로벌) */
+.ambient-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.ambient-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-pale);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: ambientFloat var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+  left: var(--x);
+  top: var(--y);
+}
+
+@keyframes ambientFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px) translateX(8px) scale(1.4);
+    opacity: 0.6;
+  }
+}
+
+/* 카드 reaction 호버 */
+.reaction:hover {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.big-reaction:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-pale);
+  transform: translateY(-2px);
+}
+
+/* 일반 버튼 hover */
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(90, 78, 140, 0.4);
+}
+
+.submit-btn:not(.disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(90, 78, 140, 0.4);
+}
