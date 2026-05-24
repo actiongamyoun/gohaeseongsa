@@ -2,17 +2,18 @@ import { useState, useEffect } from 'react';
 import LandingScreen from './screens/LandingScreen.jsx';
 import HomeScreen from './screens/HomeScreen.jsx';
 import WriteScreen from './screens/WriteScreen.jsx';
+import AiResponseScreen from './screens/AiResponseScreen.jsx';
 import DetailScreen from './screens/DetailScreen.jsx';
 import AdminScreen from './screens/AdminScreen.jsx';
 
 export default function App() {
-  // 'landing' | 'home' | 'write' | 'detail' | 'admin'
+  // 'landing' | 'home' | 'write' | 'ai-response' | 'detail' | 'admin'
   const [screen, setScreen] = useState('landing');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [detailData, setDetailData] = useState(null);
+  const [confessionDraft, setConfessionDraft] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  // URL 기반 초기 라우팅
   useEffect(() => {
     const path = window.location.pathname;
     if (path === '/app') setScreen('home');
@@ -35,6 +36,7 @@ export default function App() {
     else if (target === 'admin') window.history.pushState({}, '', '/admin');
     else if (target === 'detail') window.history.pushState({}, '', '/detail');
     else if (target === 'write') window.history.pushState({}, '', '/write');
+    else if (target === 'ai-response') window.history.pushState({}, '', '/listening');
 
     if (data !== undefined) setDetailData(data);
     setScreen(target);
@@ -63,10 +65,32 @@ export default function App() {
       {screen === 'write' && (
         <WriteScreen
           onClose={() => navigate('home')}
-          onSubmitted={(c) => {
+          onListen={(draft) => {
+            setConfessionDraft(draft);
+            navigate('ai-response');
+          }}
+        />
+      )}
+
+      {screen === 'ai-response' && confessionDraft && (
+        <AiResponseScreen
+          confessionDraft={confessionDraft}
+          onShared={(saved) => {
+            setConfessionDraft(null);
             setRefreshKey((k) => k + 1);
-            if (c) navigate('detail', c);
-            else navigate('home');
+            if (saved) {
+              navigate('detail', saved);
+            } else {
+              navigate('home');
+            }
+          }}
+          onDiscarded={() => {
+            setConfessionDraft(null);
+            navigate('home');
+          }}
+          onBack={() => {
+            setConfessionDraft(null);
+            navigate('write');
           }}
         />
       )}
