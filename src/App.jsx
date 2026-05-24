@@ -6,6 +6,7 @@ import AiResponseScreen from './screens/AiResponseScreen.jsx';
 import DetailScreen from './screens/DetailScreen.jsx';
 import AdminScreen from './screens/AdminScreen.jsx';
 import MyScreen from './screens/MyScreen.jsx';
+import { getRandomBackground } from './lib/backgrounds.js';
 
 export default function App() {
   const [screen, setScreen] = useState('landing');
@@ -13,6 +14,7 @@ export default function App() {
   const [detailData, setDetailData] = useState(null);
   const [confessionDraft, setConfessionDraft] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [bgImage] = useState(getRandomBackground); // 세션 내내 같은 배경
 
   useEffect(() => {
     const path = window.location.pathname;
@@ -46,7 +48,11 @@ export default function App() {
   }
 
   return (
-    <div className="app-frame">
+    <div
+      className="app-frame has-bg-image"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <div className="app-bg-overlay" />
       <AmbientParticles />
 
       {screen === 'landing' && (

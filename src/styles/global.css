@@ -2372,3 +2372,115 @@ input, textarea, select { font-size: 16px; }
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(90, 78, 140, 0.4);
 }
+
+/* ============================================
+   🌅 v4 - 전체 앱 배경 이미지
+   ============================================ */
+.app-frame.has-bg-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.app-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(247, 244, 238, 0.85) 30%,
+    rgba(237, 232, 245, 0.88) 70%,
+    rgba(221, 212, 237, 0.92) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.app-frame.has-bg-image > *:not(.app-bg-overlay) {
+  position: relative;
+  z-index: 1;
+}
+
+/* 헤더 - 약간 반투명하게 (배경 보이게) */
+.app-frame.has-bg-image .app-header,
+.app-frame.has-bg-image .screen-header {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* 카드 반투명 (배경 살짝 보이게) */
+.app-frame.has-bg-image .diary-card,
+.app-frame.has-bg-image .detail-confession,
+.app-frame.has-bg-image .my-stat-card,
+.app-frame.has-bg-image .chat-thread,
+.app-frame.has-bg-image .ai-decision {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* 댓글바 - 반투명 + 블러 */
+.app-frame.has-bg-image .comment-input-bar {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* 작성 화면 일기장 - 살짝 반투명 */
+.app-frame.has-bg-image .diary-paper {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+/* 랜딩 hero - 배경 위에서 보일 때 더 부드럽게 */
+.app-frame.has-bg-image .landing-hero {
+  background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(237,232,245,0.5) 100%);
+}
+
+/* AI 응답 화면 헤더 - 더 투명 */
+.app-frame.has-bg-image .ai-screen-header {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* FAB - 약간 강조 */
+.app-frame.has-bg-image .fab {
+  box-shadow:
+    0 4px 16px rgba(90, 78, 140, 0.4),
+    0 8px 32px rgba(90, 78, 140, 0.25);
+}
+
+/* 빈 상태 - 배경 보이게 */
+.app-frame.has-bg-image .empty-state {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  margin: 30px 16px;
+  padding: 50px 30px;
+}
+
+/* 떠다니는 파티클 - 배경 위에서 살짝 더 밝게 */
+.app-frame.has-bg-image .ambient-dot {
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* 랜딩 카테고리 쇼케이스 카드 반투명 */
+.app-frame.has-bg-image .cat-showcase-item {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* 랜딩 약속 카드 반투명 */
+.app-frame.has-bg-image .promise {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* 모바일에서 fixed 배경 안 먹는 이슈 대응 */
+@media (max-width: 599px) {
+  .app-frame.has-bg-image {
+    background-attachment: scroll;
+  }
+}

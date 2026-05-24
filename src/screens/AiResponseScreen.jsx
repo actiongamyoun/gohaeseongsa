@@ -4,7 +4,6 @@ import { generateAiMessages } from '../lib/ai.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { getSessionId } from '../lib/session.js';
 import { detectSelfHarm } from '../lib/safetyCheck.js';
-import { getRandomBackground } from '../lib/backgrounds.js';
 import {
   CATEGORY_ICONS, IconBack, IconEnvelope, IconHeart
 } from '../components/icons.jsx';
@@ -38,7 +37,6 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
   const [showTyping, setShowTyping] = useState(false); // "..." 인디케이터
   const [error, setError] = useState(null);
   const [waitingMsg] = useState(pickWaitingMessage);
-  const [bgImage] = useState(getRandomBackground);
   const startedRef = useRef(false);
   const bodyRef = useRef(null);
 
@@ -195,12 +193,7 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
   const CatIcon = CATEGORY_ICONS[confessionDraft.category];
 
   return (
-    <div
-      className="ai-screen has-bg"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <div className="ai-screen-overlay" />
-
+    <div className="ai-screen">
       <div className="screen-header ai-screen-header">
         {(phase === 'listening' || phase === 'envelope-falling' || phase === 'envelope-arrived' || phase === 'submitting') ? (
           <span className="header-action-placeholder" />

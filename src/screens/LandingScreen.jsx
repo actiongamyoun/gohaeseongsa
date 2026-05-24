@@ -1,18 +1,12 @@
 import { CATEGORIES } from '../lib/constants.js';
 import { CATEGORY_ICONS, IconLock, IconHeart, IconCandle, IconCheer } from '../components/icons.jsx';
-import { getRandomBackground } from '../lib/backgrounds.js';
 
 export default function LandingScreen({ onEnter, onAdmin }) {
-  const bgImage = getRandomBackground();
-
   return (
     <div className="landing-scroll">
 
       {/* ===== Hero ===== */}
-      <section
-        className="landing-hero has-bg"
-        style={{ backgroundImage: `url(${bgImage})` }}
-      >
+      <section className="landing-hero">
         <div className="hero-brand-script">Secret Diary</div>
         <h1 className="hero-title">비밀고백</h1>
         <p className="hero-tagline">익명의 당신께,<br />따뜻한 답장을</p>
