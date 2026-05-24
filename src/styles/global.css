@@ -3009,3 +3009,68 @@ input, textarea, select { font-size: 16px; }
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
+
+/* ============================================
+   🌍 v6 - 다국어 + 언어 토글
+   ============================================ */
+
+.landing-lang-toggle {
+  position: absolute;
+  top: calc(16px + var(--safe-area-top));
+  right: 16px;
+  z-index: 20;
+}
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--accent-pale);
+  border-radius: 20px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-light);
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.15s;
+}
+
+.lang-toggle:active {
+  transform: scale(0.95);
+}
+
+.lang-opt {
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: var(--ink-soft);
+  transition: all 0.15s;
+}
+
+.lang-opt.active {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.lang-divider {
+  color: var(--accent-pale);
+  font-weight: 400;
+}
+
+/* MyScreen에서 우상단 토글 - 절대 위치 X */
+.screen-header .lang-toggle {
+  margin-left: auto;
+}
+
+/* 영문 hero-title은 손글씨 폰트 + 사이즈 조정 */
+.hero-title-en {
+  font-family: 'Caveat', 'Cormorant Garamond', cursive !important;
+  font-size: 64px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  font-style: italic;
+}

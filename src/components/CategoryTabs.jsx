@@ -1,14 +1,17 @@
 import { CATEGORIES } from '../lib/constants.js';
 import { CATEGORY_ICONS } from './icons.jsx';
+import { useTranslation } from '../i18n/index.jsx';
 
 export default function CategoryTabs({ selected, onChange }) {
+  const { t } = useTranslation();
+
   return (
     <div className="category-tabs">
       <button
         className={`cat-tab ${selected === 'all' ? 'active' : ''}`}
         onClick={() => onChange('all')}
       >
-        전체
+        {t('categories.all')}
       </button>
       {CATEGORIES.map((cat) => {
         const Icon = CATEGORY_ICONS[cat.key];
@@ -19,7 +22,7 @@ export default function CategoryTabs({ selected, onChange }) {
             onClick={() => onChange(cat.key)}
           >
             {Icon && <Icon />}
-            {cat.label}
+            {t(`categories.${cat.key}`)}
           </button>
         );
       })}

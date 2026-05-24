@@ -1,9 +1,11 @@
 import { CATEGORY_MAP, REACTIONS } from '../lib/constants.js';
 import { timeAgo } from '../lib/time.js';
 import { CATEGORY_ICONS, REACTION_ICONS } from './icons.jsx';
+import { useTranslation } from '../i18n/index.jsx';
 
 export default function ConfessionCard({ confession }) {
-  const cat = CATEGORY_MAP[confession.category] || { label: '기타' };
+  const { t, lang } = useTranslation();
+  const cat = CATEGORY_MAP[confession.category] || { key: 'etc' };
   const CatIcon = CATEGORY_ICONS[confession.category];
 
   return (
@@ -11,9 +13,9 @@ export default function ConfessionCard({ confession }) {
       <div className="card-meta">
         <span className="card-category">
           {CatIcon && <CatIcon />}
-          {cat.label}
+          {t(`categories.${cat.key}`)}
         </span>
-        <span className="card-time">{timeAgo(confession.created_at)}</span>
+        <span className="card-time">{timeAgo(confession.created_at, lang)}</span>
       </div>
 
       <div className="card-content">{confession.content}</div>

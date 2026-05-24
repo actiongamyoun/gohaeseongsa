@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
+import { I18nProvider } from './i18n/index.jsx';
 import './styles/global.css';
 import './styles/landing.css';
 
@@ -10,17 +11,12 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
       .then((reg) => {
         console.log('[SW] Registered');
-
-        // 1시간마다 업데이트 체크
         setInterval(() => reg.update(), 60 * 60 * 1000);
-
-        // 새 버전 감지 시 자동 적용
         reg.addEventListener('updatefound', () => {
           const newWorker = reg.installing;
           newWorker?.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              console.log('[SW] New version available - reloading...');
-              // 새 버전 자동 적용 후 새로고침
+              console.log('[SW] New version - reloading...');
               newWorker.postMessage({ type: 'SKIP_WAITING' });
               setTimeout(() => window.location.reload(), 500);
             }
@@ -29,7 +25,6 @@ if ('serviceWorker' in navigator) {
       })
       .catch((err) => console.warn('[SW] Registration failed:', err));
 
-    // SW 컨트롤러 변경 감지 (다른 탭에서 업데이트된 경우)
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (refreshing) return;
@@ -41,6 +36,8 @@ if ('serviceWorker' in navigator) {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <I18nProvider>
+      <App />
+    </I18nProvider>
   </React.StrictMode>
 );

@@ -3,6 +3,7 @@ import Header from '../components/Header.jsx';
 import ConfessionCard from '../components/ConfessionCard.jsx';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { IconPen } from '../components/icons.jsx';
+import { useTranslation } from '../i18n/index.jsx';
 
 const DUMMY_CONFESSIONS = [
   {
@@ -39,6 +40,7 @@ export default function HomeScreen({
   onOpenDetail,
   onMyPage,
 }) {
+  const { t, lang } = useTranslation();
   const [confessions, setConfessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -114,16 +116,14 @@ export default function HomeScreen({
           </div>
         ) : error ? (
           <div className="empty-state">
-            <div className="empty-state-emoji">😢</div>
-            <div className="empty-state-title">불러오기 실패</div>
+            <div className="empty-state-title">{lang === 'en' ? 'Failed to load' : '불러오기 실패'}</div>
             <div className="empty-state-text">{error}</div>
           </div>
         ) : confessions.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-state-emoji">📭</div>
-            <div className="empty-state-title">아직 고백이 없어요</div>
+            <div className="empty-state-title">{lang === 'en' ? 'No stories yet' : '아직 이야기가 없어요'}</div>
             <div className="empty-state-text">
-              첫 번째 비밀고백을 적어보세요
+              {lang === 'en' ? 'Be the first to write one' : '첫 번째 이야기를 적어보세요'}
             </div>
           </div>
         ) : (

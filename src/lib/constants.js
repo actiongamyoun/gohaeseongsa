@@ -1,25 +1,25 @@
-// 고백 카테고리
+// 카테고리 키 정의 (라벨은 i18n에서 가져옴)
 export const CATEGORIES = [
-  { key: 'work',   label: '직장' },
-  { key: 'love',   label: '연애' },
-  { key: 'family', label: '가족' },
-  { key: 'school', label: '학교' },
-  { key: 'money',  label: '돈' },
-  { key: 'secret', label: '비밀' },
-  { key: 'guilt',  label: '죄책감' },
-  { key: 'etc',    label: '기타' },
+  { key: 'work' },
+  { key: 'love' },
+  { key: 'family' },
+  { key: 'school' },
+  { key: 'money' },
+  { key: 'secret' },
+  { key: 'guilt' },
+  { key: 'etc' },
 ];
 
 export const CATEGORY_MAP = Object.fromEntries(
   CATEGORIES.map((c) => [c.key, c])
 );
 
-// 감정 반응 - 새 라벨
+// 감정 반응 키 정의 (라벨은 i18n에서 가져옴)
 export const REACTIONS = [
-  { key: 'hug',    label: '공감해요',   color: 'rose' },
-  { key: 'me_too', label: '나도예요',   color: 'sage' },
-  { key: 'bless',  label: '응원해요',   color: 'mustard' },
-  { key: 'laugh',  label: '들어줬어요', color: 'lavender' },
+  { key: 'hug',    color: 'rose' },
+  { key: 'me_too', color: 'sage' },
+  { key: 'bless',  color: 'mustard' },
+  { key: 'laugh',  color: 'lavender' },
 ];
 
 export const REACTION_MAP = Object.fromEntries(
@@ -29,12 +29,13 @@ export const REACTION_MAP = Object.fromEntries(
 export const MAX_CONFESSION_LENGTH = 500;
 export const MAX_COMMENT_LENGTH = 300;
 
+// 신고 사유 키 (라벨은 i18n에서)
 export const REPORT_REASONS = [
-  { key: 'spam',          label: '스팸/광고' },
-  { key: 'harassment',    label: '욕설/비방' },
-  { key: 'sexual',        label: '성적인 내용' },
-  { key: 'personal_info', label: '신상정보 노출' },
-  { key: 'self_harm',     label: '자해/자살 우려' },
-  { key: 'illegal',       label: '불법 정보' },
-  { key: 'etc',           label: '기타' },
+  { key: 'spam' },
+  { key: 'harassment' },
+  { key: 'sexual' },
+  { key: 'personal_info' },
+  { key: 'self_harm' },
+  { key: 'illegal' },
+  { key: 'etc' },
 ];

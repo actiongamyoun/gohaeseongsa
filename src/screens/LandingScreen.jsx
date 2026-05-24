@@ -1,34 +1,47 @@
 import { CATEGORIES } from '../lib/constants.js';
 import { CATEGORY_ICONS, IconLock, IconHeart, IconCandle, IconCheer } from '../components/icons.jsx';
+import LanguageToggle from '../components/LanguageToggle.jsx';
+import { useTranslation } from '../i18n/index.jsx';
 
 export default function LandingScreen({ onEnter, onAdmin }) {
+  const { t, lang } = useTranslation();
+
   return (
     <div className="landing-scroll">
+      {/* 언어 토글 - 우상단 고정 */}
+      <div className="landing-lang-toggle">
+        <LanguageToggle />
+      </div>
 
       {/* ===== Hero ===== */}
       <section className="landing-hero">
-        <div className="hero-brand-script">Secret Diary</div>
-        <h1 className="hero-title">들려주세요</h1>
-        <p className="hero-tagline">익명의 당신께,<br />따뜻한 답장을</p>
+        <div className="hero-brand-script">{t('brand.name_en')}</div>
+        <h1 className={`hero-title ${lang === 'en' ? 'hero-title-en' : ''}`}>
+          {t('landing.hero_title')}
+        </h1>
+        <p className="hero-tagline">
+          {t('landing.hero_tagline_1')}<br />
+          {t('landing.hero_tagline_2')}
+        </p>
         <p className="hero-sub">
-          누구에게도 말 못한 마음,<br />
-          다 들어드릴게요
+          {t('landing.hero_sub_1')}<br />
+          {t('landing.hero_sub_2')}
         </p>
 
         <button className="hero-cta" onClick={onEnter}>
-          마음 적어보기
+          {t('landing.cta_primary')}
         </button>
-        <div className="hero-cta-sub">가입도, 로그인도 필요 없어요</div>
+        <div className="hero-cta-sub">{t('landing.cta_sub')}</div>
         <div className="hero-manifesto">
-          타인에게 상처 입히는 말은 자제하는<br />
-          <strong>성숙한 사람들의 공간</strong>입니다
+          {t('landing.manifesto_1')}<br />
+          <strong>{t('landing.manifesto_2')}</strong>{t('landing.manifesto_3')}
         </div>
       </section>
 
       {/* ===== 카테고리 ===== */}
       <section className="landing-section">
-        <div className="section-script">categories</div>
-        <h2 className="section-title">어떤 이야기든 괜찮아요</h2>
+        <div className="section-script">{t('landing.categories_script')}</div>
+        <h2 className="section-title">{t('landing.categories_title')}</h2>
 
         <div className="category-showcase">
           {CATEGORIES.map((cat) => {
@@ -36,7 +49,7 @@ export default function LandingScreen({ onEnter, onAdmin }) {
             return (
               <div key={cat.key} className="cat-showcase-item">
                 {Icon && <div className="cat-showcase-icon"><Icon /></div>}
-                <span className="cat-showcase-label">{cat.label}</span>
+                <span className="cat-showcase-label">{t(`categories.${cat.key}`)}</span>
               </div>
             );
           })}
@@ -45,36 +58,36 @@ export default function LandingScreen({ onEnter, onAdmin }) {
 
       {/* ===== 약속 ===== */}
       <section className="landing-section landing-section-cream">
-        <div className="section-script">our promise</div>
-        <h2 className="section-title">우리의 약속</h2>
+        <div className="section-script">{t('landing.promise_script')}</div>
+        <h2 className="section-title">{t('landing.promise_title')}</h2>
 
         <div className="promises">
           <div className="promise">
             <div className="promise-icon"><IconLock /></div>
             <div>
-              <div className="promise-title">완전한 익명</div>
-              <div className="promise-desc">이름도, 이메일도, 계정도 받지 않아요</div>
+              <div className="promise-title">{t('landing.promise_anon_title')}</div>
+              <div className="promise-desc">{t('landing.promise_anon_desc')}</div>
             </div>
           </div>
           <div className="promise">
             <div className="promise-icon"><IconHeart /></div>
             <div>
-              <div className="promise-title">먼저 들어드림</div>
-              <div className="promise-desc">공유 전에 AI가 따뜻한 답장을 먼저 보내드려요</div>
+              <div className="promise-title">{t('landing.promise_listen_title')}</div>
+              <div className="promise-desc">{t('landing.promise_listen_desc')}</div>
             </div>
           </div>
           <div className="promise">
             <div className="promise-icon"><IconCheer /></div>
             <div>
-              <div className="promise-title">공유는 선택</div>
-              <div className="promise-desc">공유하기 싫으면 저장 없이 깔끔하게 닫혀요</div>
+              <div className="promise-title">{t('landing.promise_share_title')}</div>
+              <div className="promise-desc">{t('landing.promise_share_desc')}</div>
             </div>
           </div>
           <div className="promise">
             <div className="promise-icon"><IconCandle /></div>
             <div>
-              <div className="promise-title">힘들 때 안내</div>
-              <div className="promise-desc">자해/자살 키워드 감지 시 전문 상담으로 안내해요</div>
+              <div className="promise-title">{t('landing.promise_help_title')}</div>
+              <div className="promise-desc">{t('landing.promise_help_desc')}</div>
             </div>
           </div>
         </div>
@@ -83,34 +96,34 @@ export default function LandingScreen({ onEnter, onAdmin }) {
       {/* ===== Final CTA ===== */}
       <section className="landing-final">
         <h2 className="final-title">
-          오늘 마음,<br />어디에 두실래요?
+          {t('landing.final_title_1')}<br />{t('landing.final_title_2')}
         </h2>
         <p className="final-sub">
-          여기에 적어두세요.<br />
-          조용히 들어드릴게요.
+          {t('landing.final_sub_1')}<br />
+          {t('landing.final_sub_2')}
         </p>
         <button className="hero-cta hero-cta-final" onClick={onEnter}>
-          마음 적어보기 →
+          {t('landing.final_cta')}
         </button>
       </section>
 
       {/* ===== Footer ===== */}
       <footer className="landing-footer">
         <div className="footer-disclaimer">
-          <strong>알아두세요</strong>
+          <strong>{t('landing.footer_disclaimer_title')}</strong>
           <p>
-            비밀고백의 AI 답장은 참고용 자동 응답이며,<br />
-            전문 심리상담을 대체하지 않습니다.<br />
-            전문가의 도움이 필요하시면 아래로 연락해주세요.
+            {t('landing.footer_disclaimer_1')}<br />
+            {t('landing.footer_disclaimer_2')}<br />
+            {t('landing.footer_disclaimer_3')}
           </p>
           <div className="footer-helplines">
-            <a href="tel:1393" className="helpline">자살예방상담 1393</a>
-            <a href="tel:1388" className="helpline">청소년상담 1388</a>
-            <a href="tel:1577-0199" className="helpline">정신건강위기상담 1577-0199</a>
+            <a href="tel:1393" className="helpline">{t('landing.helpline_1')}</a>
+            <a href="tel:1388" className="helpline">{t('landing.helpline_2')}</a>
+            <a href="tel:1577-0199" className="helpline">{t('landing.helpline_3')}</a>
           </div>
         </div>
         <div className="footer-copy">
-          © 2026 비밀고백 · Secret Diary
+          © 2026 {t('brand.name_en')}
           {onAdmin && <span className="admin-dot" onClick={onAdmin}>·</span>}
         </div>
       </footer>

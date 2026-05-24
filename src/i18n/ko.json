@@ -1,0 +1,152 @@
+{
+  "brand": {
+    "name_en": "Secret Diary",
+    "name_ko": "비밀고백"
+  },
+  "landing": {
+    "hero_title": "들려주세요",
+    "hero_tagline_1": "익명의 당신께,",
+    "hero_tagline_2": "따뜻한 답장을",
+    "hero_sub_1": "누구에게도 말 못한 마음,",
+    "hero_sub_2": "다 들어드릴게요",
+    "cta_primary": "마음 적어보기",
+    "cta_sub": "가입도, 로그인도 필요 없어요",
+    "manifesto_1": "타인에게 상처 입히는 말은 자제하는",
+    "manifesto_2": "성숙한 사람들의 공간",
+    "manifesto_3": "입니다",
+    "categories_script": "categories",
+    "categories_title": "어떤 이야기든 괜찮아요",
+    "promise_script": "our promise",
+    "promise_title": "우리의 약속",
+    "promise_anon_title": "완전한 익명",
+    "promise_anon_desc": "이름도, 이메일도, 계정도 받지 않아요",
+    "promise_listen_title": "먼저 들어드림",
+    "promise_listen_desc": "공유 전에 AI가 따뜻한 답장을 먼저 보내드려요",
+    "promise_share_title": "공유는 선택",
+    "promise_share_desc": "공유하기 싫으면 저장 없이 깔끔하게 닫혀요",
+    "promise_help_title": "힘들 때 안내",
+    "promise_help_desc": "자해/자살 키워드 감지 시 전문 상담으로 안내해요",
+    "final_title_1": "오늘 마음,",
+    "final_title_2": "어디에 두실래요?",
+    "final_sub_1": "여기에 적어두세요.",
+    "final_sub_2": "조용히 들어드릴게요.",
+    "final_cta": "마음 적어보기 →",
+    "footer_disclaimer_title": "알아두세요",
+    "footer_disclaimer_1": "비밀고백의 AI 답장은 참고용 자동 응답이며,",
+    "footer_disclaimer_2": "전문 심리상담을 대체하지 않습니다.",
+    "footer_disclaimer_3": "전문가의 도움이 필요하시면 아래로 연락해주세요.",
+    "helpline_1": "자살예방상담 1393",
+    "helpline_2": "청소년상담 1388",
+    "helpline_3": "정신건강위기상담 1577-0199"
+  },
+  "categories": {
+    "work": "직장",
+    "love": "연애",
+    "family": "가족",
+    "school": "학교",
+    "money": "돈",
+    "secret": "비밀",
+    "guilt": "죄책감",
+    "etc": "기타",
+    "all": "전체"
+  },
+  "reactions": {
+    "hug": "공감해요",
+    "me_too": "나도예요",
+    "bless": "응원해요",
+    "laugh": "들어줬어요"
+  },
+  "header": {
+    "back": "뒤로",
+    "my_page": "내 이야기",
+    "close": "닫기",
+    "menu": "메뉴",
+    "report": "신고"
+  },
+  "write": {
+    "title": "마음 적기",
+    "category_label": "어떤 이야기인가요?",
+    "content_label": "조용히 적어두세요",
+    "placeholder": "아무에게도 말하지 못한 당신의 이야기를 들려주세요.",
+    "hint_strong": "먼저 들어드릴게요",
+    "hint_desc": "적으신 마음에 한 줄 답장을 보낸 다음,\n다른 분께 들려드릴지 다시 여쭤볼게요",
+    "submit": "들어주세요",
+    "warning_title": "많이 힘드시죠?",
+    "warning_text_1": "혼자 짊어지지 않아도 돼요.",
+    "warning_text_2": "언제든 따뜻한 손을 잡을 수 있어요.",
+    "warning_continue": "계속 쓰기",
+    "alert_personal_info": "전화번호/이메일 같은 개인정보가 포함되어 있어요. 익명성을 위해 제거해주세요.",
+    "alert_profanity": "욕설이 포함된 것 같아요. 그래도 진행할까요?"
+  },
+  "ai_response": {
+    "listening": "듣는 중",
+    "envelope_falling": "답장이 오고 있어요",
+    "envelope_arrived": "답장이 도착했어요",
+    "chatting": "답장",
+    "submitting": "들려드리는 중",
+    "discarding": "잘 들었어요",
+    "waiting_1": "당신의 이야기를 듣고 있어요",
+    "waiting_2": "천천히 마음을 읽고 있어요",
+    "waiting_3": "따뜻한 답장을 적고 있어요",
+    "waiting_4": "조심스럽게 답을 고르고 있어요",
+    "claude_name": "Claude",
+    "claude_sub": "당신께 보내는 답장",
+    "decision_title_1": "이 이야기, 다른 분들에게도",
+    "decision_title_2": "들려드릴까요?",
+    "decision_sub_1": "비슷한 마음의 사람들이",
+    "decision_sub_2": "따뜻한 답장을 남겨줄 거예요",
+    "decision_yes": "네, 들려주세요",
+    "decision_no": "아니요, 여기까지",
+    "decision_hint": "아니요를 선택하면 적은 이야기는 저장되지 않아요",
+    "submitting_text": "조용히 들려드리는 중...",
+    "discarding_text": "조용히 마음에 묻어둘게요"
+  },
+  "detail": {
+    "title": "비밀 상세",
+    "anonymous_name": "익명의 영혼",
+    "warning_label": "위로 필요",
+    "comments_title": "나누어준 마음들",
+    "comments_count": "{{count}}개",
+    "comment_empty": "아직 답장이 없어요. 첫 답장을 남겨주세요.",
+    "comment_placeholder": "따뜻한 한 마디를 남겨주세요...",
+    "comment_report": "신고",
+    "menu_delete": "이 이야기 삭제"
+  },
+  "my": {
+    "title": "내 이야기",
+    "stat_count": "내가 남긴 이야기",
+    "stat_hugs": "받은 위로",
+    "section_title": "내가 쓴 이야기",
+    "empty_title": "아직 남긴 이야기가 없어요",
+    "empty_text": "마음을 적으면 여기에 모여요",
+    "delete_btn": "삭제"
+  },
+  "delete_modal": {
+    "title": "이 이야기를 삭제할까요?",
+    "warning_comments": "받은 답장 {{count}}개가 함께 사라져요",
+    "warning_reactions": "받은 위로 {{count}}개도 함께 사라져요",
+    "warning_irreversible": "한 번 삭제하면 되돌릴 수 없어요.",
+    "cancel": "취소",
+    "delete": "삭제할게요",
+    "deleting": "삭제 중..."
+  },
+  "report_modal": {
+    "title": "신고 사유를 선택해주세요",
+    "reasons": {
+      "spam": "스팸/광고",
+      "harassment": "욕설/비방",
+      "sexual": "성적인 내용",
+      "personal_info": "신상정보 노출",
+      "self_harm": "자해/자살 우려",
+      "illegal": "불법 정보",
+      "etc": "기타"
+    },
+    "cancel": "취소",
+    "alert_demo": "데모 모드에서는 신고가 저장되지 않아요.",
+    "alert_success": "신고가 접수됐어요. 검토 후 조치할게요."
+  },
+  "language": {
+    "current": "한국어",
+    "switch_to": "English"
+  }
+}

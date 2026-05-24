@@ -4,60 +4,50 @@ import { generateAiMessages } from '../lib/ai.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { getSessionId } from '../lib/session.js';
 import { detectSelfHarm } from '../lib/safetyCheck.js';
+import { useTranslation } from '../i18n/index.jsx';
 import {
   CATEGORY_ICONS, IconBack, IconEnvelope, IconHeart
 } from '../components/icons.jsx';
 
-const WAITING_MESSAGES = [
-  '당신의 이야기를 듣고 있어요',
-  '천천히 마음을 읽고 있어요',
-  '따뜻한 답장을 적고 있어요',
-  '조심스럽게 답을 고르고 있어요',
-];
-
-function pickWaitingMessage() {
-  return WAITING_MESSAGES[Math.floor(Math.random() * WAITING_MESSAGES.length)];
+function pickWaitingMessage(t) {
+  const messages = [
+    t('ai_response.waiting_1'),
+    t('ai_response.waiting_2'),
+    t('ai_response.waiting_3'),
+    t('ai_response.waiting_4'),
+  ];
+  return messages[Math.floor(Math.random() * messages.length)];
 }
 
-/**
- * 상태 흐름:
- *  - 'listening': 듣는 중 (5초)
- *  - 'envelope-falling': 봉투 떨어지는 중 (2초)
- *  - 'envelope-arrived': 봉투 도착, 봉인 풀리는 중 (2초)
- *  - 'chatting': 채팅형 답변 표시 중
- *  - 'decision': 공유 결정
- *  - 'submitting': 게시 중
- *  - 'discarding': 폐기 중
- */
 export default function AiResponseScreen({ confessionDraft, onShared, onDiscarded, onBack }) {
+  const { t, lang } = useTranslation();
   const [phase, setPhase] = useState('listening');
   const [aiMessages, setAiMessages] = useState([]);
-  const [displayedMessages, setDisplayedMessages] = useState([]); // 화면에 보이는 메시지
-  const [currentTyping, setCurrentTyping] = useState(null); // 지금 타이핑 중인 메시지 인덱스
-  const [showTyping, setShowTyping] = useState(false); // "..." 인디케이터
+  const [displayedMessages, setDisplayedMessages] = useState([]);
+  const [currentTyping, setCurrentTyping] = useState(null);
+  const [showTyping, setShowTyping] = useState(false);
   const [error, setError] = useState(null);
-  const [waitingMsg] = useState(pickWaitingMessage);
+  const [waitingMsg] = useState(() => pickWaitingMessage(t));
   const startedRef = useRef(false);
   const bodyRef = useRef(null);
 
-  // === Phase 1: AI 응답 생성 + 듣기 5초 ===
+  // Phase 1: 듣기 5초
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
 
     const startTime = Date.now();
-    const MIN_LISTEN_TIME = 5000; // 최소 5초 듣기
+    const MIN_LISTEN_TIME = 5000;
 
     (async () => {
       try {
         const messages = await generateAiMessages(
           confessionDraft.content,
-          confessionDraft.category
+          confessionDraft.category,
+          lang
         );
-
         const elapsed = Date.now() - startTime;
         const remaining = Math.max(0, MIN_LISTEN_TIME - elapsed);
-
         setTimeout(() => {
           setAiMessages(messages);
           setPhase('envelope-falling');
@@ -67,28 +57,28 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
         const elapsed = Date.now() - startTime;
         const remaining = Math.max(0, MIN_LISTEN_TIME - elapsed);
         setTimeout(() => {
-          setAiMessages(['당신의 이야기를 들었어요.', '혼자가 아니에요.', '여기에 잠시 머물러주세요.']);
+          const fallback = lang === 'en'
+            ? ['We heard you.', "You're not alone.", 'Stay here a moment.']
+            : ['당신의 이야기를 들었어요.', '혼자가 아니에요.', '여기에 잠시 머물러주세요.'];
+          setAiMessages(fallback);
           setPhase('envelope-falling');
         }, remaining);
       }
     })();
-  }, [confessionDraft]);
+  }, [confessionDraft, lang]);
 
-  // === Phase 2: 봉투 떨어짐 (2초) ===
   useEffect(() => {
     if (phase !== 'envelope-falling') return;
-    const t = setTimeout(() => setPhase('envelope-arrived'), 2000);
-    return () => clearTimeout(t);
+    const tm = setTimeout(() => setPhase('envelope-arrived'), 2000);
+    return () => clearTimeout(tm);
   }, [phase]);
 
-  // === Phase 3: 봉투 도착 + 봉인 풀림 (2초) ===
   useEffect(() => {
     if (phase !== 'envelope-arrived') return;
-    const t = setTimeout(() => setPhase('chatting'), 2000);
-    return () => clearTimeout(t);
+    const tm = setTimeout(() => setPhase('chatting'), 2000);
+    return () => clearTimeout(tm);
   }, [phase]);
 
-  // === Phase 4: 채팅형 메시지 순차 등장 ===
   useEffect(() => {
     if (phase !== 'chatting' || aiMessages.length === 0) return;
 
@@ -97,24 +87,20 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
 
     async function showNextMessage() {
       if (cancelled || messageIndex >= aiMessages.length) {
-        // 모든 메시지 다 보여줬으면 결정 단계로
         setTimeout(() => {
           if (!cancelled) setPhase('decision');
         }, 1500);
         return;
       }
 
-      // "..." 인디케이터 표시 (1.5초)
       setShowTyping(true);
       await sleep(1500);
       if (cancelled) return;
 
-      // 인디케이터 사라지고 메시지 타이핑 시작
       setShowTyping(false);
       setCurrentTyping(messageIndex);
       await sleep(100);
 
-      // 타이핑 시뮬레이션 (한 글자씩, 50ms 간격)
       const message = aiMessages[messageIndex];
       for (let i = 1; i <= message.length; i++) {
         if (cancelled) return;
@@ -123,28 +109,21 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
           next[messageIndex] = message.slice(0, i);
           return next;
         });
-        await sleep(50);
-        // 스크롤 자동 맨 아래로
+        await sleep(lang === 'en' ? 30 : 50);
         if (bodyRef.current && i % 5 === 0) {
           bodyRef.current.scrollTo({ top: bodyRef.current.scrollHeight, behavior: 'smooth' });
         }
       }
 
-      // 메시지 완료
       setCurrentTyping(null);
       messageIndex++;
-
-      // 다음 메시지 사이 간격 (1.5초)
       await sleep(1500);
       if (!cancelled) showNextMessage();
     }
 
     showNextMessage();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [phase, aiMessages]);
+    return () => { cancelled = true; };
+  }, [phase, aiMessages, lang]);
 
   async function handleShare() {
     setPhase('submitting');
@@ -152,7 +131,7 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
 
     if (!isSupabaseConfigured) {
       await sleep(800);
-      window.alert('데모 모드라 실제 저장은 안 됐어요. Supabase 환경변수를 설정해주세요.');
+      window.alert('Demo mode — not saved.');
       onShared?.(null);
       return;
     }
@@ -179,7 +158,7 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
       onShared?.(data);
     } catch (e) {
       console.error('게시 실패:', e);
-      setError(e.message || '게시에 실패했어요.');
+      setError(e.message || 'Failed to share.');
       setPhase('decision');
     }
   }
@@ -189,7 +168,7 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
     setTimeout(() => onDiscarded?.(), 1200);
   }
 
-  const cat = CATEGORY_MAP[confessionDraft.category] || { label: '기타' };
+  const cat = CATEGORY_MAP[confessionDraft.category] || { key: 'etc' };
   const CatIcon = CATEGORY_ICONS[confessionDraft.category];
 
   return (
@@ -201,35 +180,32 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
           <button
             className="header-back-btn"
             onClick={phase === 'decision' ? handleDiscard : onBack}
-            aria-label="닫기"
+            aria-label={t('header.close')}
           >
             <IconBack />
           </button>
         )}
         <span className="header-title">
-          {phase === 'listening' && '듣는 중'}
-          {phase === 'envelope-falling' && '답장이 오고 있어요'}
-          {phase === 'envelope-arrived' && '답장이 도착했어요'}
-          {phase === 'chatting' && '답장'}
-          {phase === 'decision' && '답장'}
-          {phase === 'submitting' && '들려드리는 중'}
-          {phase === 'discarding' && '잘 들었어요'}
+          {phase === 'listening' && t('ai_response.listening')}
+          {phase === 'envelope-falling' && t('ai_response.envelope_falling')}
+          {phase === 'envelope-arrived' && t('ai_response.envelope_arrived')}
+          {phase === 'chatting' && t('ai_response.chatting')}
+          {phase === 'decision' && t('ai_response.chatting')}
+          {phase === 'submitting' && t('ai_response.submitting')}
+          {phase === 'discarding' && t('ai_response.discarding')}
         </span>
         <span className="header-action-placeholder" />
       </div>
 
       <div className="ai-screen-body" ref={bodyRef}>
-
-        {/* 작성한 고민 */}
         <div className="ai-confession-preview">
           <div className="preview-cat">
             {CatIcon && <CatIcon />}
-            {cat.label}
+            {t(`categories.${cat.key}`)}
           </div>
           <div className="preview-content">{confessionDraft.content}</div>
         </div>
 
-        {/* 듣는 중 */}
         {phase === 'listening' && (
           <div className="ai-listening">
             <div className="listening-orb">
@@ -245,7 +221,6 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
           </div>
         )}
 
-        {/* 봉투 떨어지는 중 */}
         {phase === 'envelope-falling' && (
           <div className="envelope-falling-stage">
             <div className="envelope-falling">
@@ -256,7 +231,6 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
           </div>
         )}
 
-        {/* 봉투 도착 + 봉인 풀림 */}
         {phase === 'envelope-arrived' && (
           <div className="envelope-arrived-stage">
             <div className="envelope-arrived">
@@ -264,12 +238,11 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
               <div className="envelope-body opening">
                 <IconEnvelope size={60} />
               </div>
-              <div className="arrived-label">답장이 도착했어요</div>
+              <div className="arrived-label">{t('ai_response.envelope_arrived')}</div>
             </div>
           </div>
         )}
 
-        {/* 채팅형 답변 */}
         {(phase === 'chatting' || phase === 'decision' || phase === 'submitting' || phase === 'discarding') && (
           <div className="chat-thread">
             <div className="chat-header">
@@ -277,8 +250,8 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
                 <IconHeart size={20} />
               </div>
               <div className="chat-name">
-                <strong>Claude</strong>
-                <span>당신께 보내는 답장</span>
+                <strong>{t('ai_response.claude_name')}</strong>
+                <span>{t('ai_response.claude_sub')}</span>
               </div>
             </div>
 
@@ -303,15 +276,14 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
           </div>
         )}
 
-        {/* 결정 단계 */}
         {phase === 'decision' && (
           <div className="ai-decision">
             <div className="decision-title">
-              이 이야기, 다른 분들에게도<br />들려드릴까요?
+              {t('ai_response.decision_title_1')}<br />{t('ai_response.decision_title_2')}
             </div>
             <div className="decision-sub">
-              비슷한 마음의 사람들이<br />
-              따뜻한 답장을 남겨줄 거예요
+              {t('ai_response.decision_sub_1')}<br />
+              {t('ai_response.decision_sub_2')}
             </div>
 
             {error && (
@@ -322,28 +294,28 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
 
             <div className="decision-buttons">
               <button className="decision-btn primary" onClick={handleShare}>
-                네, 들려주세요
+                {t('ai_response.decision_yes')}
               </button>
               <button className="decision-btn secondary" onClick={handleDiscard}>
-                아니요, 여기까지
+                {t('ai_response.decision_no')}
               </button>
             </div>
 
             <div className="decision-hint">
-              아니요를 선택하면 적은 이야기는 저장되지 않아요
+              {t('ai_response.decision_hint')}
             </div>
           </div>
         )}
 
         {phase === 'submitting' && (
           <div className="ai-submitting">
-            <div className="listening-text">조용히 들려드리는 중...</div>
+            <div className="listening-text">{t('ai_response.submitting_text')}</div>
           </div>
         )}
 
         {phase === 'discarding' && (
           <div className="ai-discarding">
-            <div className="listening-text">조용히 마음에 묻어둘게요</div>
+            <div className="listening-text">{t('ai_response.discarding_text')}</div>
           </div>
         )}
 

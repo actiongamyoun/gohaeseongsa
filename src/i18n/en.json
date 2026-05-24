@@ -1,0 +1,152 @@
+{
+  "brand": {
+    "name_en": "Secret Diary",
+    "name_ko": ""
+  },
+  "landing": {
+    "hero_title": "Tell Me",
+    "hero_tagline_1": "To you, anonymous one —",
+    "hero_tagline_2": "a warm reply",
+    "hero_sub_1": "Whatever you couldn't tell anyone,",
+    "hero_sub_2": "we'll listen.",
+    "cta_primary": "Open up",
+    "cta_sub": "No sign-up, no login",
+    "manifesto_1": "A quiet space where words don't wound —",
+    "manifesto_2": "for thoughtful people",
+    "manifesto_3": "",
+    "categories_script": "categories",
+    "categories_title": "Any story is welcome",
+    "promise_script": "our promise",
+    "promise_title": "What we promise",
+    "promise_anon_title": "Fully anonymous",
+    "promise_anon_desc": "No name, no email, no account needed",
+    "promise_listen_title": "Listened to first",
+    "promise_listen_desc": "Before you share, AI sends you a warm reply",
+    "promise_share_title": "Sharing is your choice",
+    "promise_share_desc": "If you don't want to share, nothing is saved",
+    "promise_help_title": "Support when you need it",
+    "promise_help_desc": "We guide you to professional help when keywords are detected",
+    "final_title_1": "Where will you set",
+    "final_title_2": "today's heart down?",
+    "final_sub_1": "Write it here.",
+    "final_sub_2": "We'll listen quietly.",
+    "final_cta": "Open up →",
+    "footer_disclaimer_title": "Please note",
+    "footer_disclaimer_1": "AI replies are automated suggestions for reference",
+    "footer_disclaimer_2": "and don't replace professional counseling.",
+    "footer_disclaimer_3": "Please reach out below if you need real help.",
+    "helpline_1": "Suicide Prevention 1393 (KR)",
+    "helpline_2": "Youth Counseling 1388 (KR)",
+    "helpline_3": "Mental Health Crisis 1577-0199 (KR)"
+  },
+  "categories": {
+    "work": "Work",
+    "love": "Love",
+    "family": "Family",
+    "school": "School",
+    "money": "Money",
+    "secret": "Secret",
+    "guilt": "Guilt",
+    "etc": "Other",
+    "all": "All"
+  },
+  "reactions": {
+    "hug": "Feel you",
+    "me_too": "Me too",
+    "bless": "Rooting for you",
+    "laugh": "I heard you"
+  },
+  "header": {
+    "back": "Back",
+    "my_page": "My stories",
+    "close": "Close",
+    "menu": "Menu",
+    "report": "Report"
+  },
+  "write": {
+    "title": "Write your heart",
+    "category_label": "What kind of story?",
+    "content_label": "Write quietly here",
+    "placeholder": "Share what you couldn't tell anyone.",
+    "hint_strong": "We'll listen first",
+    "hint_desc": "After a brief reply to your words,\nwe'll ask if you'd like to share it with others.",
+    "submit": "Tell me",
+    "warning_title": "You're carrying a lot, aren't you?",
+    "warning_text_1": "You don't have to do this alone.",
+    "warning_text_2": "There's always a warm hand to reach for.",
+    "warning_continue": "Keep writing",
+    "alert_personal_info": "Personal info like phone or email was found. Please remove it to stay anonymous.",
+    "alert_profanity": "There may be inappropriate language. Continue anyway?"
+  },
+  "ai_response": {
+    "listening": "Listening",
+    "envelope_falling": "A reply is on its way",
+    "envelope_arrived": "Your reply has arrived",
+    "chatting": "Reply",
+    "submitting": "Sharing softly",
+    "discarding": "We heard you",
+    "waiting_1": "Listening to your story",
+    "waiting_2": "Reading your heart slowly",
+    "waiting_3": "Writing a warm reply",
+    "waiting_4": "Choosing words carefully",
+    "claude_name": "Claude",
+    "claude_sub": "A reply for you",
+    "decision_title_1": "Would you like to share",
+    "decision_title_2": "this story with others?",
+    "decision_sub_1": "People with similar hearts",
+    "decision_sub_2": "may leave you warm replies.",
+    "decision_yes": "Yes, share it",
+    "decision_no": "No, this is enough",
+    "decision_hint": "If you choose No, what you wrote won't be saved",
+    "submitting_text": "Sharing softly...",
+    "discarding_text": "Holding it in our hearts"
+  },
+  "detail": {
+    "title": "Story",
+    "anonymous_name": "Anonymous soul",
+    "warning_label": "needs care",
+    "comments_title": "Hearts shared with you",
+    "comments_count": "{{count}}",
+    "comment_empty": "No replies yet. Be the first to leave one.",
+    "comment_placeholder": "Leave a warm word...",
+    "comment_report": "Report",
+    "menu_delete": "Delete this story"
+  },
+  "my": {
+    "title": "My stories",
+    "stat_count": "Stories I shared",
+    "stat_hugs": "Hearts received",
+    "section_title": "What I wrote",
+    "empty_title": "No stories yet",
+    "empty_text": "When you write, your stories gather here",
+    "delete_btn": "Delete"
+  },
+  "delete_modal": {
+    "title": "Delete this story?",
+    "warning_comments": "{{count}} replies will also disappear",
+    "warning_reactions": "{{count}} hearts received will also disappear",
+    "warning_irreversible": "This cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting..."
+  },
+  "report_modal": {
+    "title": "Please choose a reason",
+    "reasons": {
+      "spam": "Spam/Ads",
+      "harassment": "Harassment/Abuse",
+      "sexual": "Sexual content",
+      "personal_info": "Personal info exposure",
+      "self_harm": "Self-harm concern",
+      "illegal": "Illegal content",
+      "etc": "Other"
+    },
+    "cancel": "Cancel",
+    "alert_demo": "Demo mode — reports aren't saved.",
+    "alert_success": "Report received. We'll review it shortly."
+  },
+  "language": {
+    "current": "English",
+    "switch_to": "한국어"
+  }
+}
