@@ -3074,3 +3074,24 @@ input, textarea, select { font-size: 16px; }
   letter-spacing: 0 !important;
   font-style: italic;
 }
+
+/* ============================================
+   🔧 v6.2 - 메뉴 잘림 방지 (overflow visible 강제)
+   ============================================ */
+
+.app-frame,
+.app-frame .screen-header,
+.app-frame .header-menu-wrap {
+  overflow: visible !important;
+}
+
+/* 헤더는 z-index 충돌 막기 위해 */
+.app-frame .screen-header {
+  position: relative;
+  z-index: 100 !important;
+}
+
+.app-frame .header-menu-wrap {
+  position: relative;
+  z-index: 9999 !important;
+}

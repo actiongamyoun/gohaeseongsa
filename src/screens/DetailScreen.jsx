@@ -241,21 +241,30 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
 
           {isMine && showMenu && (
             <>
-              <div className="menu-backdrop" onClick={() => setShowMenu(false)} />
-              <div className="header-menu" style={{
+              <div
+                className="menu-backdrop"
+                onClick={() => setShowMenu(false)}
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  zIndex: 9998,
+                  background: 'transparent',
+                }}
+              />
+              <div style={{
                 position: 'absolute',
                 top: 'calc(100% + 8px)',
-                right: 0,
+                right: '8px',
                 background: '#ffffff',
                 border: '1px solid #ebe5f0',
                 borderRadius: '12px',
-                boxShadow: '0 8px 24px rgba(90, 78, 140, 0.2)',
+                boxShadow: '0 8px 24px rgba(90, 78, 140, 0.2), 0 2px 8px rgba(0,0,0,0.08)',
                 padding: '6px',
                 minWidth: '180px',
+                maxWidth: 'calc(100vw - 32px)',
                 zIndex: 9999,
               }}>
                 <button
-                  className="header-menu-item danger"
                   onClick={() => {
                     setShowMenu(false);
                     setShowDeleteModal(true);
