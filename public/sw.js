@@ -1,5 +1,5 @@
 // 비밀고백 PWA Service Worker - v5 (network-first)
-const CACHE_VERSION = 'bimilgobaek-v6.3';
+const CACHE_VERSION = 'bimilgobaek-v6.5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

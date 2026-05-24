@@ -17,7 +17,7 @@ export default function App() {
   const [bgImage, setBgImage] = useState(getRandomBackground);
   const [bgLoaded, setBgLoaded] = useState(false);
 
-  // 배경 이미지 로드 확인
+  // 배경 이미지 로드 확인 + 첫 시도 실패 시 다른 이미지로 자동 fallback
   useEffect(() => {
     if (!bgImage) return;
     const img = new Image();
@@ -25,9 +25,22 @@ export default function App() {
       setBgLoaded(true);
       console.log('[bg] 배경 로드 성공:', bgImage);
     };
-    img.onerror = () => {
-      console.warn('[bg] 배경 로드 실패:', bgImage, '— public/backgrounds/ 폴더에 이미지가 있는지 확인하세요');
+    img.onerror = async () => {
+      console.warn('[bg] 배경 로드 실패:', bgImage, '— 다른 이미지 시도 중...');
       setBgLoaded(false);
+
+      // 비동기 검증 후 정확한 이미지로 재시도
+      try {
+        const { getRandomBackgroundAsync, refreshBackground } = await import('./lib/backgrounds.js');
+        await refreshBackground();
+        const newBg = await getRandomBackgroundAsync();
+        if (newBg && newBg !== bgImage) {
+          console.log('[bg] 대체 배경:', newBg);
+          setBgImage(newBg);
+        }
+      } catch (e) {
+        console.warn('[bg] 대체 배경 로드도 실패');
+      }
     };
     img.src = bgImage;
   }, [bgImage]);
