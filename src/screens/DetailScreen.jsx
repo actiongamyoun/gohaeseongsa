@@ -325,16 +325,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
           </div>
         </div>
 
-        {confession.ai_response && (
-          <div className="detail-ai">
-            <div className="detail-ai-label">
-              <IconHeart />
-              from Claude
-            </div>
-            <div className="detail-ai-text">{confession.ai_response}</div>
-          </div>
-        )}
-
         <div className="reaction-bar">
           {REACTIONS.map((r) => {
             const Icon = REACTION_ICONS[r.key];
