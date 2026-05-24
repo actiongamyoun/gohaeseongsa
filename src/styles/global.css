@@ -2955,3 +2955,57 @@ input, textarea, select { font-size: 16px; }
   opacity: 1 !important;
   height: auto !important;
 }
+
+/* ============================================
+   🔧 v5.4 - 랜딩 페이지에서도 배경 이미지 보이게
+   ============================================ */
+
+/* 랜딩 전체 스크롤 영역 - 배경 투명 */
+.app-frame.has-bg-image .landing-scroll {
+  background: transparent !important;
+}
+
+/* Hero 섹션 - 그라데이션 제거, 살짝 반투명만 */
+.app-frame.has-bg-image .landing-hero {
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(237, 232, 245, 0.4) 100%
+  ) !important;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* 카테고리 섹션 - 반투명 */
+.app-frame.has-bg-image .landing-section {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.app-frame.has-bg-image .landing-section-cream {
+  background: rgba(253, 250, 243, 0.55) !important;
+}
+
+/* Final CTA 섹션 - 반투명 */
+.app-frame.has-bg-image .landing-final {
+  background: linear-gradient(180deg,
+    rgba(237, 232, 245, 0.55) 0%,
+    rgba(221, 212, 237, 0.65) 100%
+  ) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Footer는 진하게 유지 (가독성) */
+.app-frame.has-bg-image .landing-footer {
+  background: rgba(45, 37, 64, 0.92) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* 매니페스토 박스 - 더 투명하게 (배경 살짝 보이게) */
+.app-frame.has-bg-image .hero-manifesto {
+  background: rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
