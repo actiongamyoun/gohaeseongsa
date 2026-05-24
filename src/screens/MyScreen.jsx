@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { getSessionId } from '../lib/session.js';
-import ConfessionCard from '../components/ConfessionCard.jsx';
-import { IconBack, IconHeart, IconUser } from '../components/icons.jsx';
+import { deleteMyConfession } from '../lib/confessions.js';
+import { CATEGORY_MAP } from '../lib/constants.js';
+import { timeAgo } from '../lib/time.js';
+import {
+  IconBack, IconHeart, IconUser, IconTrash, IconMore,
+  CATEGORY_ICONS
+} from '../components/icons.jsx';
 
 export default function MyScreen({ onClose, onOpenDetail }) {
   const [myConfessions, setMyConfessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ count: 0, totalHugs: 0 });
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     loadMyData();
@@ -17,7 +24,6 @@ export default function MyScreen({ onClose, onOpenDetail }) {
     setLoading(true);
 
     if (!isSupabaseConfigured) {
-      // 데모 모드
       setMyConfessions([]);
       setStats({ count: 0, totalHugs: 0 });
       setLoading(false);
@@ -49,6 +55,23 @@ export default function MyScreen({ onClose, onOpenDetail }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget || deleting) return;
+    setDeleting(true);
+
+    const result = await deleteMyConfession(deleteTarget.id);
+
+    if (result.success) {
+      // 목록에서 제거
+      setMyConfessions((arr) => arr.filter((c) => c.id !== deleteTarget.id));
+      setStats((s) => ({ ...s, count: s.count - 1 }));
+      setDeleteTarget(null);
+    } else {
+      window.alert(result.error || '삭제에 실패했어요.');
+    }
+    setDeleting(false);
   }
 
   return (
@@ -92,12 +115,135 @@ export default function MyScreen({ onClose, onOpenDetail }) {
           </div>
         ) : (
           myConfessions.map((c) => (
-            <div key={c.id} onClick={() => onOpenDetail?.(c)} style={{ cursor: 'pointer' }}>
-              <ConfessionCard confession={c} />
-            </div>
+            <MyCard
+              key={c.id}
+              confession={c}
+              onOpen={() => onOpenDetail?.(c)}
+              onDelete={() => setDeleteTarget(c)}
+            />
           ))
         )}
       </div>
+
+      {/* 삭제 확인 모달 */}
+      {deleteTarget && (
+        <DeleteConfirmModal
+          confession={deleteTarget}
+          onCancel={() => setDeleteTarget(null)}
+          onConfirm={handleDelete}
+          deleting={deleting}
+        />
+      )}
     </>
+  );
+}
+
+// 내 글 카드 (삭제 버튼 포함)
+function MyCard({ confession, onOpen, onDelete }) {
+  const cat = CATEGORY_MAP[confession.category] || { label: '기타' };
+  const CatIcon = CATEGORY_ICONS[confession.category];
+  const commentCount = confession.comment_count || 0;
+  const totalReactions =
+    (confession.hug_count || 0) +
+    (confession.me_too_count || 0) +
+    (confession.bless_count || 0) +
+    (confession.laugh_count || 0);
+
+  return (
+    <div className="my-card">
+      <div className="my-card-head">
+        <span className="card-category">
+          {CatIcon && <CatIcon />}
+          {cat.label}
+        </span>
+        <span className="card-time">{timeAgo(confession.created_at)}</span>
+      </div>
+
+      <div className="my-card-content" onClick={onOpen}>
+        {confession.content}
+      </div>
+
+      <div className="my-card-footer">
+        <div className="my-card-stats">
+          <span className="my-stat-mini">
+            <IconHeart size={14} /> {totalReactions}
+          </span>
+          <span className="my-stat-mini">💬 {commentCount}</span>
+        </div>
+        <button
+          className="my-delete-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          aria-label="삭제"
+        >
+          <IconTrash size={16} />
+          <span>삭제</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// 삭제 확인 모달
+function DeleteConfirmModal({ confession, onCancel, onConfirm, deleting }) {
+  const commentCount = confession.comment_count || 0;
+  const totalReactions =
+    (confession.hug_count || 0) +
+    (confession.me_too_count || 0) +
+    (confession.bless_count || 0) +
+    (confession.laugh_count || 0);
+
+  return (
+    <div className="modal-backdrop" onClick={onCancel}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <div className="delete-modal-icon">
+          <IconTrash size={36} />
+        </div>
+        <div className="modal-title">이 이야기를 삭제할까요?</div>
+
+        <div className="delete-modal-content">
+          "{confession.content.length > 40
+            ? confession.content.slice(0, 40) + '...'
+            : confession.content}"
+        </div>
+
+        {(commentCount > 0 || totalReactions > 0) && (
+          <div className="delete-warning">
+            {commentCount > 0 && (
+              <div className="delete-warning-line">
+                · 받은 답장 <strong>{commentCount}개</strong>가 함께 사라져요
+              </div>
+            )}
+            {totalReactions > 0 && (
+              <div className="delete-warning-line">
+                · 받은 위로 <strong>{totalReactions}개</strong>도 함께 사라져요
+              </div>
+            )}
+            <div className="delete-warning-bottom">
+              한 번 삭제하면 되돌릴 수 없어요.
+            </div>
+          </div>
+        )}
+
+        <div className="delete-modal-buttons">
+          <button
+            className="modal-cancel"
+            onClick={onCancel}
+            disabled={deleting}
+          >
+            취소
+          </button>
+          <button
+            className="modal-delete"
+            onClick={onConfirm}
+            disabled={deleting}
+          >
+            {deleting ? '삭제 중...' : '삭제할게요'}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

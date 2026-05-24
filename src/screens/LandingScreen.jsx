@@ -19,6 +19,10 @@ export default function LandingScreen({ onEnter, onAdmin }) {
           마음 적어보기
         </button>
         <div className="hero-cta-sub">가입도, 로그인도 필요 없어요</div>
+        <div className="hero-manifesto">
+          타인에게 상처 입히는 말은 자제하는<br />
+          <strong>성숙한 사람들의 공간</strong>입니다
+        </div>
       </section>
 
       {/* ===== 카테고리 ===== */}

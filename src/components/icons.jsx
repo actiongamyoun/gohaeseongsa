@@ -166,6 +166,29 @@ export function IconClose({ size = 24, ...props }) {
   );
 }
 
+export function IconTrash({ size = 24, ...props }) {
+  // 휴지통 (삭제)
+  return (
+    <svg width={size} height={size} {...baseProps} {...props}>
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6M14 11v6" />
+      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    </svg>
+  );
+}
+
+export function IconMore({ size = 24, ...props }) {
+  // 점 세 개 (메뉴)
+  return (
+    <svg width={size} height={size} {...baseProps} {...props}>
+      <circle cx="12" cy="5" r="1.5" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+      <circle cx="12" cy="19" r="1.5" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function IconReport({ size = 24, ...props }) {
   // 깃발 (신고)
   return (

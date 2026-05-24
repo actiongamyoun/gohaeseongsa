@@ -1,7 +1,5 @@
-// 비밀고백 PWA Service Worker - v4 (network-first)
-// 새 버전 자동 업데이트, 캐시 강제 클리어
-
-const CACHE_VERSION = 'bimilgobaek-v4.1';
+// 비밀고백 PWA Service Worker - v5 (network-first)
+const CACHE_VERSION = 'bimilgobaek-v5.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

@@ -124,13 +124,19 @@ export default function App() {
         <DetailScreen
           confessionId={detailData?.id}
           demoData={detailData?.id?.startsWith?.('demo-') ? detailData : null}
-          onClose={() => navigate('home')}
+          onClose={() => {
+            setRefreshKey((k) => k + 1);
+            navigate('home');
+          }}
         />
       )}
 
       {screen === 'my' && (
         <MyScreen
-          onClose={() => navigate('home')}
+          onClose={() => {
+            setRefreshKey((k) => k + 1);
+            navigate('home');
+          }}
           onOpenDetail={(c) => navigate('detail', c)}
         />
       )}

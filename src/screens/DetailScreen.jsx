@@ -4,8 +4,10 @@ import { timeAgo, diaryDate } from '../lib/time.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { getSessionId, getAnonNickname } from '../lib/session.js';
 import { hasProfanity } from '../lib/safetyCheck.js';
+import { deleteMyConfession, isMyConfession } from '../lib/confessions.js';
 import {
-  CATEGORY_ICONS, REACTION_ICONS, IconBack, IconReport, IconUser, IconHeart
+  CATEGORY_ICONS, REACTION_ICONS, IconBack, IconReport, IconUser, IconHeart,
+  IconTrash, IconMore
 } from '../components/icons.jsx';
 
 function IconSend({ size = 18 }) {
@@ -26,6 +28,9 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
   const [submitting, setSubmitting] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [reportTarget, setReportTarget] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (demoData) {
@@ -171,6 +176,22 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
     }
   }
 
+  async function handleDelete() {
+    if (deleting) return;
+    setDeleting(true);
+
+    const result = await deleteMyConfession(confession.id);
+
+    if (result.success) {
+      setShowDeleteModal(false);
+      // 잠시 후 닫기 (사용자에게 결과 보여줌)
+      setTimeout(() => onClose?.(), 300);
+    } else {
+      window.alert(result.error || '삭제에 실패했어요.');
+      setDeleting(false);
+    }
+  }
+
   async function submitReport(reason) {
     if (!reportTarget) return;
     try {
@@ -232,21 +253,51 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
 
   const cat = CATEGORY_MAP[confession.category] || { label: '기타' };
   const CatIcon = CATEGORY_ICONS[confession.category];
+  const isMine = isMyConfession(confession);
 
   return (
     <>
       <div className="screen-header">
         <button className="header-back-btn" onClick={onClose}><IconBack /></button>
         <span className="header-title">비밀 상세</span>
-        <button
-          className="header-icon-btn"
-          onClick={() => {
-            setReportTarget({ type: 'confession', id: confession.id });
-            setShowReport(true);
-          }}
-        >
-          <IconReport />
-        </button>
+        <div className="header-menu-wrap">
+          <button
+            className="header-icon-btn"
+            onClick={() => {
+              if (isMine) {
+                setShowMenu(!showMenu);
+              } else {
+                setReportTarget({ type: 'confession', id: confession.id });
+                setShowReport(true);
+              }
+            }}
+            aria-label={isMine ? '메뉴' : '신고'}
+          >
+            {isMine ? <IconMore /> : <IconReport />}
+          </button>
+
+          {/* 본인 글 드롭다운 메뉴 */}
+          {isMine && showMenu && (
+            <>
+              <div
+                className="menu-backdrop"
+                onClick={() => setShowMenu(false)}
+              />
+              <div className="header-menu">
+                <button
+                  className="header-menu-item danger"
+                  onClick={() => {
+                    setShowMenu(false);
+                    setShowDeleteModal(true);
+                  }}
+                >
+                  <IconTrash size={16} />
+                  <span>이 이야기 삭제</span>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="detail-screen">
@@ -366,7 +417,69 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
           onSubmit={submitReport}
         />
       )}
+
+      {showDeleteModal && confession && (
+        <DeleteConfirmModal
+          confession={confession}
+          commentCount={comments.length}
+          onCancel={() => setShowDeleteModal(false)}
+          onConfirm={handleDelete}
+          deleting={deleting}
+        />
+      )}
     </>
+  );
+}
+
+function DeleteConfirmModal({ confession, commentCount, onCancel, onConfirm, deleting }) {
+  const totalReactions =
+    (confession.hug_count || 0) +
+    (confession.me_too_count || 0) +
+    (confession.bless_count || 0) +
+    (confession.laugh_count || 0);
+
+  return (
+    <div className="modal-backdrop" onClick={onCancel}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <div className="delete-modal-icon">
+          <IconTrash size={36} />
+        </div>
+        <div className="modal-title">이 이야기를 삭제할까요?</div>
+
+        <div className="delete-modal-content">
+          "{confession.content.length > 40
+            ? confession.content.slice(0, 40) + '...'
+            : confession.content}"
+        </div>
+
+        {(commentCount > 0 || totalReactions > 0) && (
+          <div className="delete-warning">
+            {commentCount > 0 && (
+              <div className="delete-warning-line">
+                · 받은 답장 <strong>{commentCount}개</strong>가 함께 사라져요
+              </div>
+            )}
+            {totalReactions > 0 && (
+              <div className="delete-warning-line">
+                · 받은 위로 <strong>{totalReactions}개</strong>도 함께 사라져요
+              </div>
+            )}
+            <div className="delete-warning-bottom">
+              한 번 삭제하면 되돌릴 수 없어요.
+            </div>
+          </div>
+        )}
+
+        <div className="delete-modal-buttons">
+          <button className="modal-cancel" onClick={onCancel} disabled={deleting}>
+            취소
+          </button>
+          <button className="modal-delete" onClick={onConfirm} disabled={deleting}>
+            {deleting ? '삭제 중...' : '삭제할게요'}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
