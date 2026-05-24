@@ -242,16 +242,43 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
           {isMine && showMenu && (
             <>
               <div className="menu-backdrop" onClick={() => setShowMenu(false)} />
-              <div className="header-menu">
+              <div className="header-menu" style={{
+                position: 'absolute',
+                top: 'calc(100% + 8px)',
+                right: 0,
+                background: '#ffffff',
+                border: '1px solid #ebe5f0',
+                borderRadius: '12px',
+                boxShadow: '0 8px 24px rgba(90, 78, 140, 0.2)',
+                padding: '6px',
+                minWidth: '180px',
+                zIndex: 9999,
+              }}>
                 <button
                   className="header-menu-item danger"
                   onClick={() => {
                     setShowMenu(false);
                     setShowDeleteModal(true);
                   }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    width: '100%',
+                    padding: '12px 14px',
+                    background: 'transparent',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: '#c94747',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    whiteSpace: 'nowrap',
+                  }}
                 >
                   <IconTrash size={16} />
-                  <span>{t('detail.menu_delete')}</span>
+                  <span style={{ color: '#c94747' }}>{t('detail.menu_delete')}</span>
                 </button>
               </div>
             </>
