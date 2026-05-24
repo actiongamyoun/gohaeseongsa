@@ -4,6 +4,18 @@ import { timeAgo, diaryDate } from '../lib/time.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { getSessionId, getAnonNickname } from '../lib/session.js';
 import { hasProfanity } from '../lib/safetyCheck.js';
+import {
+  CATEGORY_ICONS, REACTION_ICONS, IconBack, IconReport, IconUser, IconHeart
+} from '../components/icons.jsx';
+
+function IconSend({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="22" y1="2" x2="11" y2="13" />
+      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
+  );
+}
 
 export default function DetailScreen({ confessionId, onClose, demoData }) {
   const [confession, setConfession] = useState(demoData || null);
@@ -17,7 +29,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
 
   useEffect(() => {
     if (demoData) {
-      // 데모 댓글 추가
       setComments(DEMO_COMMENTS);
       return;
     }
@@ -26,7 +37,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
 
   async function loadDetail() {
     if (!isSupabaseConfigured) return;
-
     setLoading(true);
     try {
       const sessionId = getSessionId();
@@ -64,7 +74,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
 
   async function toggleReaction(type) {
     if (!isSupabaseConfigured) {
-      // 데모 모드 토글
       const next = new Set(myReactions);
       const has = next.has(type);
       if (has) next.delete(type);
@@ -80,7 +89,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
     const sessionId = getSessionId();
     const has = myReactions.has(type);
 
-    // 낙관적 업데이트
     const next = new Set(myReactions);
     if (has) next.delete(type);
     else next.add(type);
@@ -109,7 +117,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
       }
     } catch (e) {
       console.error('반응 토글 실패:', e);
-      // 롤백
       loadDetail();
     }
   }
@@ -126,7 +133,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
     setSubmitting(true);
     try {
       if (!isSupabaseConfigured) {
-        // 데모 모드
         const fakeId = 'demo-c-' + Date.now();
         setComments((arr) => [
           {
@@ -167,7 +173,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
 
   async function submitReport(reason) {
     if (!reportTarget) return;
-
     try {
       if (!isSupabaseConfigured) {
         window.alert('데모 모드에서는 신고가 저장되지 않아요.');
@@ -175,7 +180,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
         setReportTarget(null);
         return;
       }
-
       const sessionId = getSessionId();
       const { error } = await supabase.from('reports').insert({
         target_type: reportTarget.type,
@@ -183,7 +187,6 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
         reason,
         reporter_session_id: sessionId,
       });
-
       if (error) throw error;
       window.alert('신고가 접수됐어요. 검토 후 조치할게요.');
     } catch (e) {
@@ -199,7 +202,7 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
     return (
       <>
         <div className="screen-header">
-          <button className="header-back-btn" onClick={onClose}>←</button>
+          <button className="header-back-btn" onClick={onClose}><IconBack /></button>
           <span className="header-title">고백</span>
           <span className="header-action-placeholder" />
         </div>
@@ -216,24 +219,25 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
     return (
       <>
         <div className="screen-header">
-          <button className="header-back-btn" onClick={onClose}>←</button>
+          <button className="header-back-btn" onClick={onClose}><IconBack /></button>
           <span className="header-title">고백</span>
+          <span className="header-action-placeholder" />
         </div>
         <div className="empty-state">
-          <div className="empty-state-emoji">😢</div>
           <div className="empty-state-title">고백을 찾을 수 없어요</div>
         </div>
       </>
     );
   }
 
-  const cat = CATEGORY_MAP[confession.category] || { emoji: '🤷', label: '기타' };
+  const cat = CATEGORY_MAP[confession.category] || { label: '기타' };
+  const CatIcon = CATEGORY_ICONS[confession.category];
 
   return (
     <>
       <div className="screen-header">
-        <button className="header-back-btn" onClick={onClose}>←</button>
-        <span className="header-title">고백</span>
+        <button className="header-back-btn" onClick={onClose}><IconBack /></button>
+        <span className="header-title">비밀 상세</span>
         <button
           className="header-icon-btn"
           onClick={() => {
@@ -241,24 +245,40 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
             setShowReport(true);
           }}
         >
-          🚨
+          <IconReport />
         </button>
       </div>
 
       <div className="detail-screen">
         <div className="detail-confession">
-          <div className="detail-date">{diaryDate(confession.created_at)}</div>
+          <div className="detail-author">
+            <div className="detail-author-icon">
+              <IconUser />
+            </div>
+            <div className="detail-author-info">
+              <span className="detail-author-name">익명의 영혼</span>
+              <span className="detail-author-meta">
+                {timeAgo(confession.created_at)}
+                {confession.has_warning && ' · 위로 필요'}
+              </span>
+            </div>
+          </div>
+
           <div className="detail-text">{confession.content}</div>
+
           <div className="detail-meta">
-            <span className="card-category">{cat.emoji} {cat.label}</span>
-            <span className="card-time">{timeAgo(confession.created_at)}</span>
+            <span className="card-category">
+              {CatIcon && <CatIcon />}
+              {cat.label}
+            </span>
           </div>
         </div>
 
         {confession.ai_response && (
           <div className="detail-ai">
             <div className="detail-ai-label">
-              from Claude, with love
+              <IconHeart />
+              from Claude
               <span className="ai-disclaimer">· 참고용 자동 응답</span>
             </div>
             <div className="detail-ai-text">{confession.ai_response}</div>
@@ -266,55 +286,41 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
         )}
 
         <div className="reaction-bar">
-          {REACTIONS.map((r) => (
-            <button
-              key={r.key}
-              className={`big-reaction ${myReactions.has(r.key) ? 'active' : ''}`}
-              onClick={() => toggleReaction(r.key)}
-            >
-              <span className="big-emoji">{r.emoji}</span>
-              <span className="big-count">{confession[`${r.key}_count`] || 0}</span>
-              <span className="big-label">{r.label}</span>
-            </button>
-          ))}
+          {REACTIONS.map((r) => {
+            const Icon = REACTION_ICONS[r.key];
+            return (
+              <button
+                key={r.key}
+                className={`big-reaction ${myReactions.has(r.key) ? 'active' : ''}`}
+                onClick={() => toggleReaction(r.key)}
+              >
+                {Icon && <Icon />}
+                <span className="big-count">{confession[`${r.key}_count`] || 0}</span>
+                <span className="big-label">{r.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="comments-section">
           <div className="comments-header">
-            <span>따뜻한 답장들</span>
+            <span className="comments-title">나누어준 마음들</span>
             <span className="comments-count">{comments.length}개</span>
-          </div>
-
-          <div className="comment-input">
-            <textarea
-              className="comment-textarea"
-              placeholder="따뜻한 답장을 남겨주세요"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              maxLength={MAX_COMMENT_LENGTH}
-              rows={2}
-            />
-            <button
-              className="comment-submit"
-              onClick={submitComment}
-              disabled={!commentText.trim() || submitting}
-            >
-              {submitting ? '...' : '답장'}
-            </button>
           </div>
 
           {comments.length === 0 ? (
             <div className="comment-empty">
-              아직 답장이 없어요. 첫 답장을 남겨주세요 🌷
+              아직 답장이 없어요. 첫 답장을 남겨주세요.
             </div>
           ) : (
             comments.map((c) => (
               <div key={c.id} className="comment">
+                <div className="comment-head">
+                  <span className="comment-name">{c.anon_nickname || '익명'}</span>
+                  <span className="comment-time">{timeAgo(c.created_at)}</span>
+                </div>
                 <div className="comment-text">{c.content}</div>
                 <div className="comment-footer">
-                  <span className="comment-meta">
-                    — {c.anon_nickname || '익명'}, {timeAgo(c.created_at)}
-                  </span>
                   <button
                     className="comment-report-btn"
                     onClick={() => {
@@ -329,6 +335,27 @@ export default function DetailScreen({ confessionId, onClose, demoData }) {
             ))
           )}
         </div>
+      </div>
+
+      {/* 댓글 입력바 (하단 고정) */}
+      <div className="comment-input-bar">
+        <input
+          type="text"
+          className="comment-input"
+          placeholder="따뜻한 한 마디를 남겨주세요..."
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && submitComment()}
+          maxLength={MAX_COMMENT_LENGTH}
+        />
+        <button
+          className="comment-send-btn"
+          onClick={submitComment}
+          disabled={!commentText.trim() || submitting}
+          aria-label="댓글 보내기"
+        >
+          <IconSend />
+        </button>
       </div>
 
       {showReport && (
@@ -366,24 +393,23 @@ function ReportModal({ onClose, onSubmit }) {
   );
 }
 
-// 데모 모드용 댓글
 const DEMO_COMMENTS = [
   {
     id: 'd1',
     content: '나도 어제 울었어요. 진짜 다들 그렇게 사나봐요.',
-    anon_nickname: '익명#A4F2',
+    anon_nickname: '지나가는 리스너',
     created_at: new Date(Date.now() - 3600000).toISOString(),
   },
   {
     id: 'd2',
-    content: '화장실 칸막이 안에서 우는 거 너무 공감... 화이팅 🌷',
-    anon_nickname: '익명#B71E',
+    content: '화장실 칸막이 안에서 우는 거 너무 공감... 화이팅이에요.',
+    anon_nickname: '부드러운 바람',
     created_at: new Date(Date.now() - 7200000).toISOString(),
   },
   {
     id: 'd3',
     content: 'SNS에 보이는 게 다가 아니에요. 다들 어딘가 무너지고 있어요.',
-    anon_nickname: '익명#C903',
+    anon_nickname: '따뜻한 마음',
     created_at: new Date(Date.now() - 9000000).toISOString(),
   },
 ];

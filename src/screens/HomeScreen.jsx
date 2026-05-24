@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header.jsx';
 import ConfessionCard from '../components/ConfessionCard.jsx';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
+import { IconPen } from '../components/icons.jsx';
 
 const DUMMY_CONFESSIONS = [
   {
     id: 'demo-1',
     content: '상사 험담을 단톡방에 적었는데 실수로 상사가 있는 방에 보냈다. 아직 답이 없다. 내일 출근하기 싫다...',
     category: 'work',
-    ai_response: '오늘 밤은 푹 자요. 내일은 내일의 태양이 뜨니까 ☀️',
+    ai_response: '오늘 밤은 푹 자요. 내일은 내일의 태양이 뜨니까요.',
     created_at: new Date(Date.now() - 60000).toISOString(),
     hug_count: 234, laugh_count: 89, me_too_count: 12, bless_count: 45,
   },
@@ -24,7 +25,7 @@ const DUMMY_CONFESSIONS = [
     id: 'demo-3',
     content: '엄마 생일 까먹었다. 이미 3일 지났는데 아직도 말 못함.',
     category: 'family',
-    ai_response: '지금이라도 전화해요. 늦은 효도는 있어도 안 한 효도는 없잖아요 🌷',
+    ai_response: '지금이라도 전화해요. 늦은 효도는 있어도 안 한 효도는 없잖아요.',
     created_at: new Date(Date.now() - 3600000).toISOString(),
     hug_count: 89, laugh_count: 67, me_too_count: 234, bless_count: 567,
   },
@@ -36,6 +37,7 @@ export default function HomeScreen({
   onBack,
   onWrite,
   onOpenDetail,
+  onMyPage,
 }) {
   const [confessions, setConfessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -90,6 +92,7 @@ export default function HomeScreen({
         selectedCategory={selectedCategory}
         onCategoryChange={onCategoryChange}
         onBack={onBack}
+        onMyPage={onMyPage}
       />
 
       <div className="scroll-area">
@@ -137,7 +140,7 @@ export default function HomeScreen({
         onClick={onWrite}
         aria-label="새 고백 작성"
       >
-        ✒️
+        <IconPen />
       </button>
     </>
   );

@@ -1,14 +1,17 @@
 import { CATEGORY_MAP, REACTIONS } from '../lib/constants.js';
 import { timeAgo } from '../lib/time.js';
+import { CATEGORY_ICONS, REACTION_ICONS, IconHeart } from './icons.jsx';
 
 export default function ConfessionCard({ confession }) {
-  const cat = CATEGORY_MAP[confession.category] || { emoji: '🤷', label: '기타' };
+  const cat = CATEGORY_MAP[confession.category] || { label: '기타' };
+  const CatIcon = CATEGORY_ICONS[confession.category];
 
   return (
     <div className="diary-card">
       <div className="card-meta">
         <span className="card-category">
-          {cat.emoji} {cat.label}
+          {CatIcon && <CatIcon />}
+          {cat.label}
         </span>
         <span className="card-time">{timeAgo(confession.created_at)}</span>
       </div>
@@ -17,19 +20,24 @@ export default function ConfessionCard({ confession }) {
 
       {confession.ai_response && (
         <div className="ai-response">
-          <span className="ai-label">from Claude <span className="ai-disclaimer">· 참고용 자동 응답</span></span>
-          {confession.ai_response}
+          <div className="ai-label">
+            <IconHeart />
+            from Claude
+            <span className="ai-disclaimer">· 참고용 자동 응답</span>
+          </div>
+          <div className="ai-response-text">{confession.ai_response}</div>
         </div>
       )}
 
       <div className="card-reactions">
         {REACTIONS.map((r) => {
+          const Icon = REACTION_ICONS[r.key];
           const count = confession[`${r.key}_count`] || 0;
           return (
-            <div key={r.key} className={`reaction ${count > 0 ? 'active' : ''}`}>
-              <span className="reaction-emoji">{r.emoji}</span>
+            <button key={r.key} className={`reaction ${count > 0 ? 'active' : ''}`}>
+              {Icon && <Icon />}
               <span>{count}</span>
-            </div>
+            </button>
           );
         })}
       </div>

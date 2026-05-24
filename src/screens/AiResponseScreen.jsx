@@ -4,21 +4,23 @@ import { generateAiResponse } from '../lib/ai.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { getSessionId } from '../lib/session.js';
 import { detectSelfHarm } from '../lib/safetyCheck.js';
+import {
+  CATEGORY_ICONS, IconBack, IconCandle, IconEnvelope,
+  IconHeart, IconCheer
+} from '../components/icons.jsx';
 
-// 5가지 연출 타입
 const ANIMATION_TYPES = ['envelope', 'candle', 'petals', 'paper-fold', 'star-shower'];
 
 function pickRandomAnimation() {
   return ANIMATION_TYPES[Math.floor(Math.random() * ANIMATION_TYPES.length)];
 }
 
-// 대기 중 보여줄 메시지 (랜덤)
 const WAITING_MESSAGES = [
-  '당신의 이야기를 듣고 있어요...',
-  '천천히 마음을 읽고 있어요...',
-  '따뜻한 답장을 적고 있어요...',
-  '조심스럽게 답을 고르고 있어요...',
-  '한 글자 한 글자 적고 있어요...',
+  '당신의 이야기를 듣고 있어요',
+  '천천히 마음을 읽고 있어요',
+  '따뜻한 답장을 적고 있어요',
+  '조심스럽게 답을 고르고 있어요',
+  '한 글자 한 글자 적고 있어요',
 ];
 
 function pickWaitingMessage() {
@@ -26,7 +28,6 @@ function pickWaitingMessage() {
 }
 
 export default function AiResponseScreen({ confessionDraft, onShared, onDiscarded, onBack }) {
-  // 'waiting' | 'revealing' | 'decision' | 'submitting' | 'discarding'
   const [phase, setPhase] = useState('waiting');
   const [aiResponse, setAiResponse] = useState('');
   const [displayText, setDisplayText] = useState('');
@@ -35,12 +36,11 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
   const [error, setError] = useState(null);
   const startedRef = useRef(false);
 
-  // 1단계: AI 응답 생성 + 최소 3~5초 대기
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
 
-    const minWait = 3000 + Math.floor(Math.random() * 2000); // 3~5초
+    const minWait = 3000 + Math.floor(Math.random() * 2000);
     const startTime = Date.now();
 
     (async () => {
@@ -53,16 +53,9 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
         const elapsed = Date.now() - startTime;
         const remaining = Math.max(0, minWait - elapsed);
 
-        // 최소 대기 시간 채우기
         setTimeout(() => {
-          if (response) {
-            setAiResponse(response);
-            setPhase('revealing');
-          } else {
-            // AI 실패해도 fallback 메시지로 진행
-            setAiResponse('당신의 이야기를 들었어요. 혼자가 아니에요.');
-            setPhase('revealing');
-          }
+          setAiResponse(response || '당신의 이야기를 들었어요. 혼자가 아니에요.');
+          setPhase('revealing');
         }, remaining);
       } catch (e) {
         console.error('AI 응답 실패:', e);
@@ -76,7 +69,6 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
     })();
   }, [confessionDraft]);
 
-  // 2단계: 응답 텍스트 타자기 효과로 표시
   useEffect(() => {
     if (phase !== 'revealing' || !aiResponse) return;
 
@@ -87,7 +79,6 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
       setDisplayText(aiResponse.slice(0, i));
       if (i >= aiResponse.length) {
         clearInterval(interval);
-        // 응답이 다 나타난 후 잠시 대기 후 결정 단계로
         setTimeout(() => setPhase('decision'), 800);
       }
     }, 60);
@@ -137,11 +128,11 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
     setTimeout(() => onDiscarded?.(), 800);
   }
 
-  const cat = CATEGORY_MAP[confessionDraft.category] || { emoji: '🤷', label: '기타' };
+  const cat = CATEGORY_MAP[confessionDraft.category] || { label: '기타' };
+  const CatIcon = CATEGORY_ICONS[confessionDraft.category];
 
   return (
-    <div className={`ai-screen ai-anim-${animation}`}>
-      {/* 헤더 (간소화 — 대기/공개 중엔 뒤로가기 숨김) */}
+    <div className="ai-screen">
       <div className="screen-header ai-screen-header">
         {(phase === 'waiting' || phase === 'submitting') ? (
           <span className="header-action-placeholder" />
@@ -151,59 +142,59 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
             onClick={phase === 'decision' ? handleDiscard : onBack}
             aria-label="닫기"
           >
-            ←
+            <IconBack />
           </button>
         )}
         <span className="header-title">
-          {phase === 'waiting' && '듣는 중...'}
+          {phase === 'waiting' && '듣는 중'}
           {phase === 'revealing' && '답장이 왔어요'}
           {phase === 'decision' && '답장이 왔어요'}
-          {phase === 'submitting' && '들려드리는 중...'}
+          {phase === 'submitting' && '들려드리는 중'}
           {phase === 'discarding' && '잘 들었어요'}
         </span>
         <span className="header-action-placeholder" />
       </div>
 
-      {/* 백그라운드 애니메이션 (랜덤) */}
       <div className="ai-bg-animation">
         {animation === 'petals' && (
           <>
-            <span className="petal petal-1">🌸</span>
-            <span className="petal petal-2">🌷</span>
-            <span className="petal petal-3">🌸</span>
-            <span className="petal petal-4">🌼</span>
-            <span className="petal petal-5">🌷</span>
+            <div className="bg-particle particle-1"><IconHeart /></div>
+            <div className="bg-particle particle-2"><IconHeart /></div>
+            <div className="bg-particle particle-3"><IconHeart /></div>
+            <div className="bg-particle particle-4"><IconHeart /></div>
+            <div className="bg-particle particle-5"><IconHeart /></div>
           </>
         )}
         {animation === 'star-shower' && (
           <>
-            <span className="star star-1">✨</span>
-            <span className="star star-2">⭐</span>
-            <span className="star star-3">✨</span>
-            <span className="star star-4">🌟</span>
-            <span className="star star-5">✨</span>
+            <div className="star-particle s1"><IconCheer /></div>
+            <div className="star-particle s2"><IconCheer /></div>
+            <div className="star-particle s3"><IconCheer /></div>
+            <div className="star-particle s4"><IconCheer /></div>
+            <div className="star-particle s5"><IconCheer /></div>
           </>
         )}
         {animation === 'candle' && (
           <div className="candle-bg">
-            <span className="candle-flame">🕯️</span>
+            <IconCandle />
           </div>
         )}
       </div>
 
       <div className="ai-screen-body">
 
-        {/* 작성한 고백 미리보기 */}
         <div className="ai-confession-preview">
-          <div className="preview-cat">{cat.emoji} {cat.label}</div>
+          <div className="preview-cat">
+            {CatIcon && <CatIcon />}
+            {cat.label}
+          </div>
           <div className="preview-content">{confessionDraft.content}</div>
         </div>
 
-        {/* 대기 단계 */}
         {phase === 'waiting' && (
           <div className="ai-waiting">
-            <div className="waiting-icon">
-              <span className="waiting-pulse">🕯️</span>
+            <div className="waiting-icon-large waiting-pulse">
+              <IconCandle size={56} />
             </div>
             <div className="waiting-text">{waitingMsg}</div>
             <div className="waiting-dots">
@@ -214,54 +205,56 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
           </div>
         )}
 
-        {/* 응답 등장 (연출별로 다름) */}
         {(phase === 'revealing' || phase === 'decision' || phase === 'submitting' || phase === 'discarding') && (
           <>
-            {/* 봉투 연출 */}
             {animation === 'envelope' && (
               <div className="ai-envelope">
-                <div className="envelope-front">
-                  <div className="envelope-flap"></div>
-                  <div className="envelope-letter">
-                    <div className="letter-from">From. Claude</div>
-                    <div className="letter-body">{displayText}<span className="cursor">|</span></div>
-                    <div className="letter-stamp">🌷</div>
+                <div className="envelope-card">
+                  <div className="envelope-icon">
+                    <IconEnvelope />
                   </div>
+                  <div className="ai-card-label">
+                    <IconHeart />
+                    from Claude
+                  </div>
+                  <div className="ai-card-text">
+                    {displayText}<span className="cursor">|</span>
+                  </div>
+                  <div className="ai-card-disclaimer">참고용 자동 응답</div>
                 </div>
               </div>
             )}
 
-            {/* 종이 펼침 연출 */}
             {animation === 'paper-fold' && (
               <div className="ai-paper-fold">
                 <div className="folded-paper">
-                  <div className="paper-content">
-                    <div className="paper-label">답장</div>
-                    <div className="paper-body">{displayText}<span className="cursor">|</span></div>
+                  <div className="ai-card-label">
+                    <IconHeart />
+                    from Claude
                   </div>
+                  <div className="ai-card-text">
+                    {displayText}<span className="cursor">|</span>
+                  </div>
+                  <div className="ai-card-disclaimer">참고용 자동 응답</div>
                 </div>
               </div>
             )}
 
-            {/* 촛불/꽃잎/별 연출 — 단순 카드 */}
             {(animation === 'candle' || animation === 'petals' || animation === 'star-shower') && (
               <div className="ai-simple-card">
-                <div className="simple-card-label">
-                  {animation === 'candle' && '🕯️ '}
-                  {animation === 'petals' && '🌷 '}
-                  {animation === 'star-shower' && '✨ '}
+                <div className="ai-card-label">
+                  <IconHeart />
                   from Claude
                 </div>
-                <div className="simple-card-text">
+                <div className="ai-card-text">
                   {displayText}<span className="cursor">|</span>
                 </div>
-                <div className="simple-card-disclaimer">— 참고용 자동 응답</div>
+                <div className="ai-card-disclaimer">참고용 자동 응답</div>
               </div>
             )}
           </>
         )}
 
-        {/* 결정 단계 */}
         {phase === 'decision' && (
           <div className="ai-decision">
             <div className="decision-title">
@@ -274,7 +267,7 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
 
             {error && (
               <div className="error-msg" style={{ marginTop: 16 }}>
-                😢 {error}
+                {error}
               </div>
             )}
 
@@ -293,19 +286,15 @@ export default function AiResponseScreen({ confessionDraft, onShared, onDiscarde
           </div>
         )}
 
-        {/* 제출 중 */}
         {phase === 'submitting' && (
           <div className="ai-submitting">
             <div className="waiting-text">조용히 들려드리는 중...</div>
           </div>
         )}
 
-        {/* 폐기 중 */}
         {phase === 'discarding' && (
           <div className="ai-discarding">
-            <div className="waiting-text">
-              조용히 마음에 묻어둘게요 🌷
-            </div>
+            <div className="waiting-text">조용히 마음에 묻어둘게요</div>
           </div>
         )}
 

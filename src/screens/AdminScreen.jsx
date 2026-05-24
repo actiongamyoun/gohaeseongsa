@@ -147,7 +147,7 @@ export default function AdminScreen({ onClose }) {
           className={`admin-tab ${tab === 'reports' ? 'active' : ''}`}
           onClick={() => setTab('reports')}
         >
-          🚨 신고 ({reports.length})
+          신고 ({reports.length})
         </button>
         <button
           className={`admin-tab ${tab === 'confessions' ? 'active' : ''}`}
@@ -203,8 +203,8 @@ export default function AdminScreen({ onClose }) {
                 <div key={c.id} className="admin-card">
                   <div className="admin-card-meta">
                     <span className="admin-tag">{cat.emoji} {cat.label}</span>
-                    {!c.is_public && <span className="admin-tag">🔒 비공개</span>}
-                    {c.has_warning && <span className="admin-tag warn">⚠️ 자해</span>}
+                    {!c.is_public && <span className="admin-tag">비공개</span>}
+                    {c.has_warning && <span className="admin-tag warn">자해 경고</span>}
                     {c.is_hidden && <span className="admin-tag warn">숨김</span>}
                     {c.is_deleted && <span className="admin-tag warn">삭제됨</span>}
                     <span className="admin-time">{timeAgo(c.created_at)}</span>
